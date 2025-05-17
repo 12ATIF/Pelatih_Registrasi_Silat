@@ -29,6 +29,7 @@ class DashboardController extends Controller
             'lunas' => $pembayarans->where('status', 'lunas')->count(),
             'menunggu_verifikasi' => $pembayarans->where('status', 'menunggu_verifikasi')->count(),
             'belum_bayar' => $pembayarans->where('status', 'belum_bayar')->count(),
+            'sudah_lunas' => $pembayarans->where('status', 'lunas')->sum('total_tagihan'),
         ];
         
         // Ambil pengumuman/jadwal terbaru

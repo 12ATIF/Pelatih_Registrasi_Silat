@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'pelatih' => [
+        'driver' => 'session',
+        'provider' => 'pelatih',
+        ],
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+        'pelatih' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Pelatih::class,
         ],
 
         // 'users' => [

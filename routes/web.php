@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return redirect()->route('pelatih.login.form');
+});
 // Guest routes for pelatih
 Route::prefix('pelatih')->group(function () {
     Route::get('login', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'showLoginForm'])->name('pelatih.login.form');
