@@ -20,6 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Route::aliasMiddleware('pelatih', \App\Http\Middleware\AuthenticatePelatih::class);
+        Route::aliasMiddleware('auth.pelatih', \App\Http\Middleware\AuthenticatePelatih::class);
     }
 }
