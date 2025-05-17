@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'pelatih' => \App\Http\Middleware\AuthenticatePelatih::class,
+        'auth.pelatih' => \App\Http\Middleware\AuthenticatePelatih::class,
         'redirectIfAdminAuthenticated' => \App\Http\Middleware\RedirectIfAdminAuthenticated::class,
     ];
 }

@@ -11,7 +11,7 @@ Route::prefix('pelatih')->group(function () {
 });
 
 // Protected pelatih routes
-Route::prefix('pelatih')->middleware('auth.pelatih')->group(function () {
+Route::prefix('pelatih')->middleware('pelatih')->group(function () {
     Route::post('logout', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'logout'])->name('pelatih.logout');
     
     // Dashboard
