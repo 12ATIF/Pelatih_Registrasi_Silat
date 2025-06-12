@@ -7,15 +7,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - Portal Pelatih Pencak Silat</title>
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     
-    <!-- Custom CSS -->
     <style>
         body {
             min-height: 100vh;
@@ -25,25 +21,56 @@
         .sidebar {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             z-index: 100;
+            /* Warna Latar Sidebar Utama */
+            background-color: #212529; /* Bootstrap's bg-dark */
+            color: #f8f9fa; /* Bootstrap's text-light */
         }
         .sidebar .nav-link {
-            color: #333;
+            /* Warna Tautan Default di Sidebar */
+            color: #f8f9fa; /* text-light */
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
             margin: 0.2rem 0;
         }
         .sidebar .nav-link:hover {
-            background-color: #f0f0f0;
+            /* Warna Tautan Saat Hover di Sidebar */
+            background-color: #495057; /* Abu-abu gelap lebih terang */
+            color: #ffffff;
         }
         .sidebar .nav-link.active {
-            background-color: #198754;
-            color: white;
+            /* Warna Tautan Aktif di Sidebar */
+            background-color: #FFD700; /* Kuning Emas (dari logo) */
+            color: #212529; /* Teks gelap agar kontras dengan kuning */
         }
+        .sidebar .text-muted { /* Untuk sub-judul seperti "Manajemen" */
+            color: #adb5bd !important; /* Warna muted yang lebih terang di bg gelap */
+        }
+        .sidebar hr {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .brand-text-orange { /* Untuk teks "Pencak Silat" di sidebar */
+            color: #F97A16 !important; /* Oranye dari logo */
+        }
+        .sidebar .dropdown-menu {
+            background-color: #343a40;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .sidebar .dropdown-item {
+            color: #f8f9fa;
+        }
+        .sidebar .dropdown-item:hover {
+            background-color: #495057;
+            color: #ffffff;
+        }
+        .sidebar .dropdown-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .content {
             flex: 1;
         }
         .main-content {
-            padding-top: 56px;
+            padding-top: 56px; /* Sesuaikan jika tinggi navbar berubah */
         }
         
         @media (min-width: 768px) {
@@ -57,7 +84,7 @@
             .content {
                 min-height: 100vh;
             }
-            .navbar-top {
+            .navbar-top { /* Kelas ini sepertinya tidak digunakan di navbar.blade.php, navbar menggunakan sticky-top */
                 height: 56px;
                 position: relative;
             }
@@ -66,31 +93,41 @@
             }
         }
         
-        .border-left-primary { border-left: 4px solid #4e73df; }
-        .border-left-success { border-left: 4px solid #1cc88a; }
-        .border-left-warning { border-left: 4px solid #f6c23e; }
-        .border-left-danger { border-left: 4px solid #e74a3b; }
-        .border-left-info { border-left: 4px solid #36b9cc; }
+        /* Pastikan navbar tetap memiliki tinggi yang cukup */
+        .navbar.sticky-top {
+            min-height: 56px;
+        }
+
+        /* Styling untuk footer */
+        .footer-dark {
+            background-color: #212529; /* Bootstrap's bg-dark */
+            color: #adb5bd; /* Warna muted untuk teks footer */
+        }
+        .footer-dark p {
+            margin-bottom: 0;
+        }
+
+        .border-left-primary { border-left: 4px solid #FF8C00; } /* Oranye menggantikan primary */
+        .border-left-success { border-left: 4px solid #FFD700; } /* Kuning menggantikan success */
+        .border-left-warning { border-left: 4px solid #F97A16; } /* Oranye lebih pekat untuk warning */
+        .border-left-danger { border-left: 4px solid #e74a3b; } /* Merah tetap untuk danger */
+        .border-left-info { border-left: 4px solid #36b9cc; } /* Biru muda tetap untuk info atau bisa diganti */
+
     </style>
     
     @stack('styles')
 </head>
 <body>
-    <!-- Sidebar -->
     @include('layouts.partials.pelatih.sidebar')
     
     <div class="content">
-        <!-- Navbar -->
         @include('layouts.partials.pelatih.navbar')
         
-        <!-- Content Wrapper -->
         <div class="container-fluid py-4 px-3 px-md-4 main-content">
-            <!-- Page Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h4 class="mb-0">@yield('title')</h4>
                     
-                    <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="{{ route('pelatih.dashboard') }}">Dashboard</a></li>
@@ -99,13 +136,11 @@
                     </nav>
                 </div>
                 
-                <!-- Action Buttons -->
                 <div>
                     @yield('action-buttons')
                 </div>
             </div>
             
-            <!-- Alert Messages -->
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -120,26 +155,19 @@
                 </div>
             @endif
             
-            <!-- Main Content -->
             @yield('content')
         </div>
         
-        <!-- Footer -->
         @include('layouts.partials.pelatih.footer')
     </div>
     
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
     
-    <!-- Global Scripts -->
     <script>
-        // Set default configuration for DataTables
         $.extend(true, $.fn.dataTable.defaults, {
             language: {
                 processing: 'Sedang memproses...',
@@ -162,14 +190,12 @@
             autoWidth: false,
         });
         
-        // CSRF Token setup
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
         
-        // Auto-dismiss alerts after 5 seconds
         setTimeout(function() {
             $('.alert-dismissible').alert('close');
         }, 5000);

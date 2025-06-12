@@ -1,7 +1,7 @@
-<div class="sidebar bg-light d-none d-md-flex flex-column flex-shrink-0 p-3">
+<div class="sidebar bg-dark text-light d-none d-md-flex flex-column flex-shrink-0 p-3">
     <a href="{{ route('pelatih.dashboard') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" height="40" class="me-2">
-        <span class="fs-5 fw-semibold">Pencak Silat</span>
+        <img src="{{ asset('app/img/MASKOT.png') }}" alt="Logo" height="40" class="me-2 rounded">
+        <span class="fs-5 fw-semibold brand-text-orange">Pencak Silat</span>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
@@ -45,8 +45,8 @@
     </ul>
     <hr>
     <div class="dropdown">
-        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="bg-success text-white rounded-circle p-2 me-2" style="width: 38px; height: 38px; text-align: center;">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-light" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="bg-warning text-dark rounded-circle p-2 me-2" style="width: 38px; height: 38px; text-align: center; line-height:normal; display:flex; align-items:center; justify-content:center;">
                 <i class="fas fa-user"></i>
             </div>
             <div>
@@ -69,14 +69,13 @@
     </div>
 </div>
 
-<!-- Offcanvas Mobile Menu -->
-<div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+<div class="offcanvas offcanvas-start d-md-none bg-dark text-light" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="sidebarMenuLabel">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" height="30" class="me-2">
-            Pencak Silat
+            <img src="{{ asset('images/MASKOT-11.jpg') }}" alt="Logo" height="30" class="me-2 rounded">
+            <span class="brand-text-orange">Pencak Silat</span>
         </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
         <ul class="nav nav-pills flex-column mb-auto">

@@ -115,7 +115,7 @@
         <h6 class="m-0 font-weight-bold">Daftar Pembayaran</h6>
     </div>
     <div class="card-body">
-        @if($pembayarans->count() > 0)
+        @if(count($pembayarans) > 0)
             <div class="table-responsive">
                 <table class="table table-bordered" id="pembayaran-table">
                     <thead>
