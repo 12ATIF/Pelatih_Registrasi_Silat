@@ -40,8 +40,8 @@
         
         .form-page-container { /* Mengganti nama dari .login-container */
             width: 100%;
-            max-width: 1100px;
-            min-height: 600px; 
+            max-width: 950px; /* Widened to 950px */
+            min-height: 420px; 
             margin: auto;
             display: flex;
             border-radius: 28px; 
@@ -51,13 +51,13 @@
         }
         
         .graphic-side {
-            flex: 1.2;
+            flex: 0.9;
             background: var(--secondary-black); 
             display: flex;
             flex-direction: column;
             justify-content: center; 
             align-items: center; 
-            padding: 40px;
+            padding: 20px; /* Reduced padding */
             color: var(--primary-white);
             position: relative;
             overflow: hidden;
@@ -80,9 +80,9 @@
         }
         
         .form-content-side { /* Mengganti nama dari .login-side */
-            flex: 0.8;
+            flex: 1.1;
             background-color: var(--primary-white);
-            padding: 40px; /* Sedikit dikurangi untuk form yang lebih panjang */
+            padding: 25px 20px; /* Sedikit dikurangi untuk form yang lebih panjang */
             display: flex;
             flex-direction: column;
             position: relative;
@@ -91,28 +91,28 @@
         
         .brand-logo {
             position: absolute; /* Diposisikan absolut di graphic-side */
-            top: 40px;
-            left: 40px;
-            display: flex; align-items: center; gap: 15px;
+            top: 25px;
+            left: 25px;
+            display: flex; align-items: center; gap: 8px;
             z-index: 10;
         }
-        .brand-logo-icon { font-size: 2.2rem; color: var(--primary-yellow); filter: drop-shadow(0 0 10px var(--primary-yellow));}
-        .brand-text { font-weight: 800; font-size: 1.7rem; color: var(--primary-yellow); letter-spacing: 1.5px; text-transform: uppercase; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .brand-logo-icon { font-size: 1.4rem; color: var(--primary-yellow); filter: drop-shadow(0 0 10px var(--primary-yellow));}
+        .brand-text { font-weight: 800; font-size: 1.1rem; color: var(--primary-yellow); letter-spacing: 1px; text-transform: uppercase; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         
         .tiger-container {
-            width: 450px; height: 450px; 
+            width: 200px; height: 200px; /* Reduced from 250px */
             display: flex; justify-content: center; align-items: center; 
             z-index: 5;
-            margin-top: 60px; /* Beri ruang dari brand logo */
+            margin-top: 30px; /* Beri ruang dari brand logo */
         }
         .tiger-image {
-            width: 100%; max-width: 400px; 
+            width: 100%; max-width: 180px; /* Reduced from 220px */ 
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6));
             transform-origin: center center; /* Disesuaikan untuk animasi nafas */
         }
         
         .yellow-glow {
-            position: absolute; width: 380px; height: 380px;
+            position: absolute; width: 180px; height: 180px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(255,193,7,0.3) 0%, rgba(255,193,7,0) 65%); 
             top: 50%; left: 50%; /* Dipusatkan dengan graphic-side */
@@ -120,7 +120,7 @@
             animation: pulse 4s infinite ease-in-out;
         }
         .belt-highlight {
-            position: absolute; width: 190px; height: 55px;
+            position: absolute; width: 100px; height: 25px;
             background-color: rgba(255,193,7,0.2); 
             border-radius: 12px;
             top: 45%; left: 50%; /* Disesuaikan relatif ke tiger */
@@ -170,17 +170,17 @@
         .circle-2 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%); bottom: -120px; left: -120px; } 
 
         .page-title-section { /* Mengganti .event-title */
-             position: relative; z-index: 10; text-align: center; margin-bottom: 25px; /* Margin dikurangi */
+             position: relative; z-index: 10; text-align: center; margin-bottom: 15px; /* Margin dikurangi */
         }
-        .page-title-section h1 { font-size: 2.2rem; font-weight: 800; margin: 0; line-height: 1.1; letter-spacing: 1px; }
+        .page-title-section h1 { font-size: 1.4rem; font-weight: 800; margin: 0; line-height: 1.1; letter-spacing: 1px; }
         .page-title-section h1 .yellow-text { color: var(--primary-yellow); text-shadow: 1px 1px 0px var(--primary-black), 2px 2px 3px rgba(0,0,0,0.2); }
         .page-title-section h1 .black-text { color: var(--primary-black); text-shadow: 1px 1px 1px rgba(255,193,7,0.2); }
-        .page-title-section p { font-size: 1rem; color: var(--medium-gray-text); font-weight: 500; margin-top: 8px; }
+        .page-title-section p { font-size: 0.75rem; color: var(--medium-gray-text); font-weight: 500; margin-top: 4px; }
         
         .form-control {
-            height: 48px; border-radius: 10px; 
+            height: 36px; border-radius: 8px; 
             border: 1px solid #ddd; 
-            padding: 0 18px; font-size: 0.9rem; /* Padding disesuaikan */
+            padding: 0 10px; font-size: 0.8rem; /* Padding disesuaikan */
             transition: all 0.3s ease; background-color: #fdfdfd; 
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
@@ -192,7 +192,7 @@
         }
         .form-label {
             font-weight: 600; color: var(--dark-gray-text);
-            margin-bottom: 8px; font-size: 0.85rem; /* Font label sedikit dikecilkan */
+            margin-bottom: 3px; font-size: 0.75rem; /* Font label sedikit dikecilkan */
             display: flex; align-items: center;
         }
         .form-label i { color: var(--primary-orange); margin-right: 8px; font-size: 0.9em; }
@@ -202,8 +202,8 @@
             background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
             border: none; 
             color: var(--primary-black); 
-            padding: 12px; border-radius: 10px; /* Padding disesuaikan */
-            font-weight: 700; font-size: 1rem; letter-spacing: 0.8px;
+            padding: 8px; border-radius: 8px; /* Padding disesuaikan */
+            font-weight: 700; font-size: 0.85rem; letter-spacing: 0.8px;
             transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); 
             box-shadow: 0 6px 20px rgba(255,152,0,0.3), 0 2px 5px rgba(0,0,0,0.1);
             position: relative; overflow: hidden; text-transform: uppercase;

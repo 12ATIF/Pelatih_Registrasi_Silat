@@ -36,8 +36,8 @@
         
         .login-container {
             width: 100%;
-            max-width: 1100px; /* Max width of the login box */
-            min-height: 600px; /* Min height to ensure layout consistency */
+            max-width: 950px; /* Widened to 950px */
+            min-height: 420px;
             margin: auto;
             display: flex;
             border-radius: 24px;
@@ -48,12 +48,13 @@
         
         /* Left side - Graphic Side */
         .graphic-side {
-            flex: 1.2;
+            flex: 1; 
             background: var(--primary-black);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 40px;
+            justify-content: center; /* Changed to center */
+            align-items: center; /* Added alignment */
+            padding: 20px;
             color: white;
             position: relative;
             overflow: hidden;
@@ -78,9 +79,9 @@
         }
         
         .login-side {
-            flex: 0.8;
+            flex: 1;
             background-color: white;
-            padding: 50px 40px;
+            padding: 25px 20px; /* Reduced padding further */
             display: flex;
             flex-direction: column;
             position: relative;
@@ -89,22 +90,23 @@
         
         /* Brand Logo */
         .brand-logo {
+            position: absolute;
+            top: 25px;
+            left: 25px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            position: relative;
+            gap: 10px;
             z-index: 10;
         }
         
         .brand-logo-icon {
-            font-size: 2rem;
+            font-size: 1.4rem; /* Reduced */
             color: var(--primary-yellow);
         }
         
         .brand-text {
             font-weight: 800;
-            font-size: 1.6rem;
+            font-size: 1.1rem; /* Reduced */
             color: var(--primary-yellow);
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -112,49 +114,50 @@
         
         /* Tiger Mascot */
         .tiger-container {
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 420px;
-            height: 420px;
+            width: 320px; 
+            height: 320px; 
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: center;
             z-index: 5;
+            margin: auto; /* Forces perfect centering in available space */
+            margin-top: auto;
+            margin-bottom: auto; 
+            position: relative; 
+            bottom: auto; left: auto; transform: none; 
         }
         
         .tiger-image {
             width: 100%;
-            max-width: 380px;
+            max-width: 280px;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-            transform-origin: bottom center;
+            transform-origin: center center;
         }
         
-        /* Glow Effects */
+        /* Glow Effects - Now scoped to tiger-container */
         .yellow-glow {
             position: absolute;
-            width: 350px;
-            height: 350px;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(255,193,7,0.4) 0%, rgba(255,193,7,0) 70%);
-            top: 65%;
+            top: 50%; 
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 2;
+            z-index: -1; /* Behind the tiger */
             animation: pulse 4s infinite ease-in-out;
         }
         
         .belt-highlight {
             position: absolute;
-            width: 180px;
-            height: 50px;
+            width: 140px;
+            height: 40px;
             background-color: rgba(255,193,7,0.3);
             border-radius: 10px;
-            top: 58%; 
+            top: 50%; 
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
+            transform: translate(-50%, -50%);
+            z-index: -1; /* Behind the tiger */
             animation: beltGlow 3s infinite ease-in-out;
         }
         
@@ -198,9 +201,9 @@
         
         /* Tiger Animation */
         @keyframes breathing {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.03); }
-            100% { transform: translateX(-50%) scale(1); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
         }
         
         .breathing {
@@ -225,19 +228,19 @@
         .circle-2 { width: 200px; height: 200px; background-color: rgba(0, 0, 0, 0.05); bottom: -100px; right: 50px; }
         
         /* Login Side Elements */
-        .event-title { position: relative; z-index: 10; text-align: center; margin-bottom: 30px; } /* Reduced margin-bottom */
-        .event-title h1 { font-size: 2.5rem; font-weight: 800; margin: 0; line-height: 1; letter-spacing: 2px; }
+        .event-title { position: relative; z-index: 10; text-align: center; margin-bottom: 15px; }
+        .event-title h1 { font-size: 1.4rem; font-weight: 800; margin: 0; line-height: 1; letter-spacing: 1px; } /* Reduced size */
         .event-title h1 .yellow-text { color: var(--primary-yellow); text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1); }
         .event-title h1 .black-text { color: var(--primary-black); }
-        .event-title p { font-size: 1rem; color: #555; font-weight: 500; margin-top: 5px; }
+        .event-title p { font-size: 0.75rem; color: #555; font-weight: 500; margin-top: 5px; }
         
         /* Form Elements (Bootstrap's .form-control will be primarily used) */
         .form-control { /* Customizations on top of Bootstrap */
-            height: 50px; /* Adjusted height */
+            height: 38px; /* Reduced from 40px */
             border-radius: 8px;
             border: 2px solid #eaeaea;
-            padding: 0 15px; /* Adjusted padding */
-            font-size: 0.95rem; /* Adjusted font size */
+            padding: 0 10px;
+            font-size: 0.8rem; /* Reduced font size */
             transition: all 0.3s ease;
             background-color: #f9f9f9;
         }
@@ -319,10 +322,10 @@
         @media (max-width: 992px) {
             .login-container { flex-direction: column; height: auto; max-width: 500px; /* Adjusted for single column */ }
             .graphic-side { min-height: 300px; padding: 30px; } /* Adjusted padding */
-            .tiger-container { position: relative; height: 220px; bottom: auto; margin-top: 20px; transform: translateX(-50%) scale(0.9); /* Adjust scale and position */ left:50%;}
-            .tiger-image { max-width: 200px; }
-            .belt-highlight { top: 52%; width: 100px; height: 25px; } /* Adjusted */
-            .yellow-glow { top: 58%; width: 220px; height: 220px; } /* Adjusted */
+            .tiger-container { position: relative; height: auto; margin: 10px auto; bottom: auto; left: auto; transform: none; margin-top: 0;}
+            .tiger-image { max-width: 220px; }
+            .belt-highlight { top: 50%; width: 100px; height: 30px; } 
+            .yellow-glow { top: 50%; width: 220px; height: 220px; }
             .event-title h1 { font-size: 2rem; }
             .event-title p { font-size: 0.9rem; }
             .login-side { padding: 40px 30px; } /* Adjusted padding */
@@ -363,13 +366,9 @@
             
             <div class="particles-container" id="particles"></div>
             
-            <div class="yellow-glow"></div>
-            <div class="belt-highlight"></div>
-            
-            <div class="decoration-circle circle-1"></div>
-            <div class="decoration-circle circle-2"></div>
-            
             <div class="tiger-container breathing">
+                <div class="yellow-glow"></div>
+                <div class="belt-highlight"></div>
                 <img src="{{ asset('app/img/MASKOT.png') }}" alt="Maskot Harimau Silat" class="tiger-image" 
                      onerror="this.onerror=null; this.src='https://placehold.co/380x380/111111/FFC107?text=Maskot+Harimau';">
             </div>

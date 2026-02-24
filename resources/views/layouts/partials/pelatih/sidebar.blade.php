@@ -72,7 +72,7 @@
 <div class="offcanvas offcanvas-start d-md-none bg-dark text-light" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="sidebarMenuLabel">
-            <img src="{{ asset('images/MASKOT-11.jpg') }}" alt="Logo" height="30" class="me-2 rounded">
+            <img src="{{ asset('app/img/MASKOT.png') }}" alt="Logo" height="30" class="me-2 rounded">
             <span class="brand-text-orange">Pencak Silat</span>
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>

@@ -13,43 +13,59 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     
     <style>
+        /* === Layout Utama: Sidebar tetap, konten scroll sendiri === */
+        html, body {
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Mencegah seluruh halaman scroll */
+        }
         body {
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
+
+        /* Wrapper utama: sidebar + content berdampingan */
+        .app-wrapper {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* === Sidebar: Fixed dengan scroll sendiri === */
         .sidebar {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
             z-index: 100;
-            /* Warna Latar Sidebar Utama */
-            background-color: #212529; /* Bootstrap's bg-dark */
-            color: #f8f9fa; /* Bootstrap's text-light */
+            background-color: #212529;
+            color: #f8f9fa;
+            width: 250px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Penuh dari app-wrapper */
+            overflow-y: auto; /* Sidebar punya scroll sendiri */
         }
         .sidebar .nav-link {
-            /* Warna Tautan Default di Sidebar */
-            color: #f8f9fa; /* text-light */
+            color: #f8f9fa;
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
             margin: 0.2rem 0;
         }
         .sidebar .nav-link:hover {
-            /* Warna Tautan Saat Hover di Sidebar */
-            background-color: #495057; /* Abu-abu gelap lebih terang */
+            background-color: #495057;
             color: #ffffff;
         }
         .sidebar .nav-link.active {
-            /* Warna Tautan Aktif di Sidebar */
-            background-color: #FFD700; /* Kuning Emas (dari logo) */
-            color: #212529; /* Teks gelap agar kontras dengan kuning */
+            background-color: #FFD700;
+            color: #212529;
         }
-        .sidebar .text-muted { /* Untuk sub-judul seperti "Manajemen" */
-            color: #adb5bd !important; /* Warna muted yang lebih terang di bg gelap */
+        .sidebar .text-muted {
+            color: #adb5bd !important;
         }
         .sidebar hr {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .sidebar .brand-text-orange { /* Untuk teks "Pencak Silat" di sidebar */
-            color: #F97A16 !important; /* Oranye dari logo */
+        .sidebar .brand-text-orange {
+            color: #F97A16 !important;
         }
         .sidebar .dropdown-menu {
             background-color: #343a40;
@@ -66,30 +82,43 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* === Content Area: Navbar + Body + Footer === */
         .content {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Mencegah content area scroll keseluruhan */
+            min-width: 0; /* Mencegah overflow horizontal */
         }
+
+        /* Navbar tetap di atas content */
+        .content > .navbar {
+            flex-shrink: 0;
+        }
+
+        /* Hanya bagian body ini yang bisa scroll */
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto; /* Scroll utama hanya di sini */
+            overflow-x: hidden;
+        }
+
         .main-content {
-            padding-top: 56px; /* Sesuaikan jika tinggi navbar berubah */
+            padding-top: 20px;
         }
-        
-        @media (min-width: 768px) {
-            body {
-                flex-direction: row;
-            }
+
+        /* Footer tetap di bawah */
+        .footer-wrapper {
+            flex-shrink: 0;
+        }
+
+        /* === Responsive: Sembunyikan sidebar di mobile === */
+        @media (max-width: 767.98px) {
             .sidebar {
-                width: 250px;
-                min-height: 100vh;
-            }
-            .content {
-                min-height: 100vh;
-            }
-            .navbar-top { /* Kelas ini sepertinya tidak digunakan di navbar.blade.php, navbar menggunakan sticky-top */
-                height: 56px;
-                position: relative;
+                display: none !important; /* Gunakan offcanvas di mobile */
             }
             .main-content {
-                padding-top: 20px;
+                padding-top: 10px;
             }
         }
         
@@ -118,47 +147,54 @@
     @stack('styles')
 </head>
 <body>
-    @include('layouts.partials.pelatih.sidebar')
-    
-    <div class="content">
-        @include('layouts.partials.pelatih.navbar')
+    <div class="app-wrapper">
+        @include('layouts.partials.pelatih.sidebar')
         
-        <div class="container-fluid py-4 px-3 px-md-4 main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h4 class="mb-0">@yield('title')</h4>
+        <div class="content">
+            @include('layouts.partials.pelatih.navbar')
+            
+            {{-- Hanya bagian ini yang bisa di-scroll --}}
+            <div class="content-wrapper">
+                <div class="container-fluid py-4 px-3 px-md-4 main-content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h4 class="mb-0">@yield('title')</h4>
+                            
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="{{ route('pelatih.dashboard') }}">Dashboard</a></li>
+                                    @yield('breadcrumb')
+                                </ol>
+                            </nav>
+                        </div>
+                        
+                        <div>
+                            @yield('action-buttons')
+                        </div>
+                    </div>
                     
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="{{ route('pelatih.dashboard') }}">Dashboard</a></li>
-                            @yield('breadcrumb')
-                        </ol>
-                    </nav>
-                </div>
-                
-                <div>
-                    @yield('action-buttons')
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    
+                    @yield('content')
                 </div>
             </div>
             
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            
-            @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            
-            @yield('content')
+            <div class="footer-wrapper">
+                @include('layouts.partials.pelatih.footer')
+            </div>
         </div>
-        
-        @include('layouts.partials.pelatih.footer')
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
