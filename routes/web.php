@@ -14,19 +14,19 @@ Route::prefix('pelatih')->group(function () {
 });
 
 // Protected pelatih routes
-Route::prefix('pelatih')->middleware('auth.pelatih')->group(function () {
+Route::prefix('pelatih')->middleware(['auth.pelatih', 'role:user'])->group(function () {
     Route::post('logout', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'logout'])->name('pelatih.logout');
-    
+
     // Dashboard
     Route::get('dashboard', [App\Http\Controllers\Pelatih\DashboardController::class, 'index'])->name('pelatih.dashboard');
-    
+
     // Kontingen
     Route::get('kontingen', [App\Http\Controllers\Pelatih\KontingenController::class, 'index'])->name('pelatih.kontingen.index');
     Route::post('kontingen', [App\Http\Controllers\Pelatih\KontingenController::class, 'store'])->name('pelatih.kontingen.store');
     Route::get('kontingen/{id}', [App\Http\Controllers\Pelatih\KontingenController::class, 'show'])->name('pelatih.kontingen.show');
     Route::put('kontingen/{id}', [App\Http\Controllers\Pelatih\KontingenController::class, 'update'])->name('pelatih.kontingen.update');
     Route::delete('kontingen/{id}', [App\Http\Controllers\Pelatih\KontingenController::class, 'destroy'])->name('pelatih.kontingen.destroy');
-    
+
     // Peserta
     Route::get('peserta', [App\Http\Controllers\Pelatih\PesertaController::class, 'index'])->name('pelatih.peserta.index');
     Route::get('kontingen/{id}/peserta', [App\Http\Controllers\Pelatih\PesertaController::class, 'index'])->name('pelatih.kontingen.peserta');
@@ -36,20 +36,20 @@ Route::prefix('pelatih')->middleware('auth.pelatih')->group(function () {
     Route::get('peserta/{id}/edit', [App\Http\Controllers\Pelatih\PesertaController::class, 'edit'])->name('pelatih.peserta.edit');
     Route::put('peserta/{id}', [App\Http\Controllers\Pelatih\PesertaController::class, 'update'])->name('pelatih.peserta.update');
     Route::delete('peserta/{id}', [App\Http\Controllers\Pelatih\PesertaController::class, 'destroy'])->name('pelatih.peserta.destroy');
-    
+
     // Dokumen
     Route::get('peserta/{pesertaId}/dokumen', [App\Http\Controllers\Pelatih\DokumenPesertaController::class, 'index'])->name('pelatih.dokumen.index');
     Route::post('peserta/{pesertaId}/dokumen', [App\Http\Controllers\Pelatih\DokumenPesertaController::class, 'store'])->name('pelatih.dokumen.store');
     Route::get('peserta/{pesertaId}/dokumen/{id}', [App\Http\Controllers\Pelatih\DokumenPesertaController::class, 'show'])->name('pelatih.dokumen.show');
     Route::get('peserta/{pesertaId}/dokumen/{id}/download', [App\Http\Controllers\Pelatih\DokumenPesertaController::class, 'download'])->name('pelatih.dokumen.download');
     Route::delete('peserta/{pesertaId}/dokumen/{id}', [App\Http\Controllers\Pelatih\DokumenPesertaController::class, 'destroy'])->name('pelatih.dokumen.destroy');
-    
+
     // Pembayaran
     Route::get('pembayaran', [App\Http\Controllers\Pelatih\PembayaranController::class, 'index'])->name('pelatih.pembayaran.index');
     Route::get('pembayaran/{id}', [App\Http\Controllers\Pelatih\PembayaranController::class, 'show'])->name('pelatih.pembayaran.show');
     Route::post('pembayaran/{id}/upload', [App\Http\Controllers\Pelatih\PembayaranController::class, 'uploadBukti'])->name('pelatih.pembayaran.upload');
     Route::post('pembayaran/{id}/recalculate', [App\Http\Controllers\Pelatih\PembayaranController::class, 'hitungUlangTagihan'])->name('pelatih.pembayaran.recalculate');
-    
+
     // Jadwal
     Route::get('jadwal', [App\Http\Controllers\Pelatih\JadwalPertandinganController::class, 'index'])->name('pelatih.jadwal.index');
     Route::get('jadwal/{id}', [App\Http\Controllers\Pelatih\JadwalPertandinganController::class, 'show'])->name('pelatih.jadwal.show');

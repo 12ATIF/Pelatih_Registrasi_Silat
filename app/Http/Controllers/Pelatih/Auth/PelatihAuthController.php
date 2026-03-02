@@ -29,50 +29,53 @@ class PelatihAuthController extends Controller
             if ($request->expectsJson()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
+
             return back()->withErrors($validator)->withInput($request->only('email'));
         }
 
         $credentials = $request->only('email', 'password');
         if (Auth::guard('pelatih')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            
+
             // Verifikasi status aktif
-            if (!Auth::guard('pelatih')->user()->is_active) {
+            if (! Auth::guard('pelatih')->user()->is_active) {
                 Auth::guard('pelatih')->logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-                
+
                 if ($request->expectsJson()) {
                     return response()->json(['message' => 'Akun Anda dinonaktifkan. Silakan hubungi admin.'], 403);
                 }
+
                 return redirect()->route('pelatih.login.form')
                     ->with('error', 'Akun Anda dinonaktifkan. Silakan hubungi admin.');
             }
-            
+
             if ($request->expectsJson()) {
                 $pelatih = Auth::guard('pelatih')->user();
                 $token = $pelatih->createToken('pelatih-api-token')->plainTextToken;
+
                 return response()->json(['token' => $token, 'pelatih' => $pelatih]);
             }
-            
+
             return redirect()->intended(route('pelatih.dashboard'));
         }
-        
+
         if ($request->expectsJson()) {
             return response()->json(['message' => 'Email atau password salah.'], 401);
         }
-        
+
         return back()->withErrors([
             'email' => 'Email atau password yang diberikan tidak cocok dengan catatan kami.',
         ])->withInput($request->only('email'));
     }
-    
+
     // Proses registrasi
     public function showRegistrationForm()
     {
         return view('pelatih.auth.register');
     }
-    
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -87,6 +90,7 @@ class PelatihAuthController extends Controller
             if ($request->expectsJson()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
+
             return back()->withErrors($validator)->withInput($request->except('password', 'password_confirmation'));
         }
 
@@ -97,13 +101,15 @@ class PelatihAuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'is_active' => true,
+            'role' => 'user', // Default role untuk pelatih
         ]);
-        
+
         if ($request->expectsJson()) {
             $token = $pelatih->createToken('pelatih-api-token')->plainTextToken;
+
             return response()->json(['token' => $token, 'pelatih' => $pelatih], 201);
         }
-        
+
         return redirect()->route('pelatih.login.form')
             ->with('success', 'Registrasi berhasil! Silakan login dengan akun yang telah Anda buat.');
     }
@@ -114,11 +120,11 @@ class PelatihAuthController extends Controller
         Auth::guard('pelatih')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         if ($request->expectsJson()) {
             return response()->json(['message' => 'Berhasil logout.']);
         }
-        
+
         return redirect()->route('pelatih.login.form');
     }
 }

@@ -9,7 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Pelatih extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'pelatih';
 
@@ -20,6 +20,7 @@ class Pelatih extends Authenticatable
         'email',
         'password',
         'is_active',
+        'role', // 'user' — untuk role middleware
     ];
 
     protected $hidden = [
