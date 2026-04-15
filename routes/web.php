@@ -30,6 +30,7 @@ Route::prefix('pelatih')->middleware(['auth.pelatih', 'role:user'])->group(funct
     // Peserta
     Route::get('peserta', [App\Http\Controllers\Pelatih\PesertaController::class, 'index'])->name('pelatih.peserta.index');
     Route::get('kontingen/{id}/peserta', [App\Http\Controllers\Pelatih\PesertaController::class, 'index'])->name('pelatih.kontingen.peserta');
+    Route::get('peserta/kelas-tanding', [App\Http\Controllers\Pelatih\PesertaController::class, 'getKelasTanding'])->name('pelatih.peserta.kelas-tanding');
     Route::get('peserta/create', [App\Http\Controllers\Pelatih\PesertaController::class, 'create'])->name('pelatih.peserta.create');
     Route::post('peserta', [App\Http\Controllers\Pelatih\PesertaController::class, 'store'])->name('pelatih.peserta.store');
     Route::get('peserta/{id}', [App\Http\Controllers\Pelatih\PesertaController::class, 'show'])->name('pelatih.peserta.show');

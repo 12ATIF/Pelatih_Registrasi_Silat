@@ -4,7 +4,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         
-        <a class="navbar-brand d-md-none" href="#">@yield('title')</a>
+        <a class="navbar-brand d-md-none fw-bold brand-text-orange" href="#" style="font-size: 1.1rem;">
+            @yield('title')
+        </a>
         
         <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown">

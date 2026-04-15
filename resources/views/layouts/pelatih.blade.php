@@ -44,28 +44,32 @@
             height: 100%; /* Penuh dari app-wrapper */
             overflow-y: auto; /* Sidebar punya scroll sendiri */
         }
-        .sidebar .nav-link {
+        .sidebar .nav-link, .offcanvas .nav-link {
             color: #f8f9fa;
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
             margin: 0.2rem 0;
+            transition: all 0.3s ease;
         }
-        .sidebar .nav-link:hover {
+        .sidebar .nav-link:hover, .offcanvas .nav-link:hover {
             background-color: #495057;
             color: #ffffff;
         }
-        .sidebar .nav-link.active {
-            background-color: #FFD700;
-            color: #212529;
+        .sidebar .nav-link.active, .offcanvas .nav-link.active {
+            background-color: #FFD700 !important;
+            color: #212529 !important;
+            font-weight: 600;
         }
-        .sidebar .text-muted {
+        .sidebar .text-muted, .offcanvas .text-muted {
             color: #adb5bd !important;
         }
-        .sidebar hr {
+        .sidebar hr, .offcanvas hr {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .sidebar .brand-text-orange {
+        .sidebar .brand-text-orange, .offcanvas .brand-text-orange {
             color: #F97A16 !important;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
         .sidebar .dropdown-menu {
             background-color: #343a40;
@@ -114,11 +118,48 @@
 
         /* === Responsive: Sembunyikan sidebar di mobile === */
         @media (max-width: 767.98px) {
+            .app-wrapper {
+                flex-direction: column;
+                height: 100vh; /* Tetap 100vh agar app-wrapper tidak melebihi viewport */
+            }
+            .content {
+                height: 100%; /* Biarkan child yang memenuhi ruang */
+            }
+            .content-wrapper {
+                flex: 1; /* Pastikan dia berexpansi dan punya scroll sendiri */
+            }
             .sidebar {
                 display: none !important; /* Gunakan offcanvas di mobile */
             }
             .main-content {
                 padding-top: 10px;
+            }
+            /* Mobile stat cards - smaller padding */
+            .card-body {
+                padding: 0.75rem;
+            }
+            .card-body .h5 {
+                font-size: 1rem;
+            }
+            .card-body .fa-2x {
+                font-size: 1.3em !important;
+            }
+            /* Mobile progress text stacking */
+            .progress-info-mobile {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            /* Page header wrap */
+            .page-header-wrapper {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.5rem;
+            }
+            .page-header-wrapper .action-btn-group {
+                width: 100%;
+            }
+            .page-header-wrapper .action-btn-group .btn {
+                width: 100%;
             }
         }
         
@@ -131,9 +172,27 @@
         .footer-dark {
             background-color: #212529; /* Bootstrap's bg-dark */
             color: #adb5bd; /* Warna muted untuk teks footer */
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         .footer-dark p {
             margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Styling Mobile Header/Navbar Border */
+        .navbar.bg-dark {
+            background-color: #212529 !important;
+            border-bottom: 2px solid #F97A16;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+            outline: none;
         }
 
         .border-left-primary { border-left: 4px solid #FF8C00; } /* Oranye menggantikan primary */
@@ -156,19 +215,19 @@
             {{-- Hanya bagian ini yang bisa di-scroll --}}
             <div class="content-wrapper">
                 <div class="container-fluid py-4 px-3 px-md-4 main-content">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 page-header-wrapper">
                         <div>
                             <h4 class="mb-0">@yield('title')</h4>
                             
                             <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
+                                <ol class="breadcrumb mb-0 small">
                                     <li class="breadcrumb-item"><a href="{{ route('pelatih.dashboard') }}">Dashboard</a></li>
                                     @yield('breadcrumb')
                                 </ol>
                             </nav>
                         </div>
                         
-                        <div>
+                        <div class="action-btn-group">
                             @yield('action-buttons')
                         </div>
                     </div>

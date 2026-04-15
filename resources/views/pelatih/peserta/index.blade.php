@@ -22,7 +22,7 @@
         <form id="filter-form" method="GET">
             <div class="row">
                 @if(isset($kontingenList) && $kontingenList->count() > 1)
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 col-6 mb-3">
                     <label for="kontingen_id" class="form-label">Kontingen</label>
                     <select class="form-select" id="kontingen_id" name="kontingen_id">
                         <option value="">Semua Kontingen</option>
@@ -35,7 +35,7 @@
                 </div>
                 @endif
                 
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 col-6 mb-3">
                     <label for="subkategori_id" class="form-label">Subkategori</label>
                     <select class="form-select" id="subkategori_id" name="subkategori_id">
                         <option value="">Semua Subkategori</option>
@@ -47,7 +47,7 @@
                     </select>
                 </div>
                 
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 col-6 mb-3">
                     <label for="kelompok_usia_id" class="form-label">Kelompok Usia</label>
                     <select class="form-select" id="kelompok_usia_id" name="kelompok_usia_id">
                         <option value="">Semua Kelompok Usia</option>
@@ -59,7 +59,7 @@
                     </select>
                 </div>
                 
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 col-6 mb-3">
                     <label for="status_verifikasi" class="form-label">Status Verifikasi</label>
                     <select class="form-select" id="status_verifikasi" name="status_verifikasi">
                         <option value="">Semua Status</option>

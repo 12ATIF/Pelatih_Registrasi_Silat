@@ -9,7 +9,7 @@
 @section('content')
 <!-- Statistik Utama -->
 <div class="row">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4">
         <div class="card border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4">
         <div class="card border-left-warning shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4">
         <div class="card border-left-danger shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -91,7 +91,7 @@
         <div class="progress mb-4">
             <div class="progress-bar bg-success" role="progressbar" style="width: {{ $progressPembayaran }}%" aria-valuenow="{{ $progressPembayaran }}" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
-        <div class="mt-2 d-flex justify-content-between">
+        <div class="mt-2 d-flex justify-content-between flex-column flex-sm-row gap-1 progress-info-mobile">
             <span>Total Tagihan: Rp {{ number_format($pembayaranStats['total_tagihan'], 0, ',', '.') }}</span>
             <span>Total Lunas: Rp {{ number_format($pembayaranStats['sudah_lunas'], 0, ',', '.') }}</span>
         </div>
@@ -200,7 +200,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-md-3 col-6 mb-3">
                 <a href="{{ route('pelatih.peserta.create') }}" class="card bg-light h-100 text-decoration-none">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
@@ -211,7 +211,7 @@
                 </a>
             </div>
             
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-md-3 col-6 mb-3">
                 <a href="{{ route('pelatih.pembayaran.index') }}" class="card bg-light h-100 text-decoration-none">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
@@ -222,7 +222,7 @@
                 </a>
             </div>
             
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-md-3 col-6 mb-3">
                 <a href="{{ route('pelatih.jadwal.index') }}" class="card bg-light h-100 text-decoration-none">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">
@@ -233,7 +233,7 @@
                 </a>
             </div>
             
-            <div class="col-md-3 col-sm-6 mb-3">
+            <div class="col-md-3 col-6 mb-3">
                 <a href="{{ route('pelatih.peserta.index') }}" class="card bg-light h-100 text-decoration-none">
                     <div class="card-body text-center p-4">
                         <div class="mb-3">

@@ -22,7 +22,7 @@
                     <thead>
                         <tr>
                             <th>Nama Kontingen</th>
-                            <th>Asal Daerah</th>
+                            <th>Nama Pelatih</th>
                             <th>Kontak Pendamping</th>
                             <th>Jumlah Peserta</th>
                             <th>Status</th>
@@ -99,7 +99,7 @@
                         <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
                     <div class="mb-3">
-                        <label for="asal_daerah" class="form-label">Asal Daerah <span class="text-danger">*</span></label>
+                        <label for="asal_daerah" class="form-label">Nama Pelatih <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="asal_daerah" name="asal_daerah" required>
                     </div>
                     <div class="mb-3">
@@ -134,7 +134,7 @@
                         <input type="text" class="form-control" id="edit_nama" name="nama" required>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_asal_daerah" class="form-label">Asal Daerah <span class="text-danger">*</span></label>
+                        <label for="edit_asal_daerah" class="form-label">Nama Pelatih <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="edit_asal_daerah" name="asal_daerah" required>
                     </div>
                     <div class="mb-3">
