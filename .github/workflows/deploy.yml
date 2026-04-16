@@ -40,7 +40,16 @@ jobs:
             docker stop silat_pelatih || true
             docker rm silat_pelatih || true
             docker run -d -p 8002:80 --name silat_pelatih --network silat_net \
-              -e DB_HOST=silat_db \
-              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e APP_ENV=production \
               -e APP_KEY=${{ secrets.APP_KEY_PELATIH }} \
+              -e APP_URL=https://unperopen.com \
+              -e DB_CONNECTION=pgsql \
+              -e DB_HOST=silat_db \
+              -e DB_PORT=5432 \
+              -e DB_DATABASE=silat_db \
+              -e DB_USERNAME=silat_user \
+              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e SESSION_DRIVER=file \
+              -e CACHE_STORE=file \
+              -e QUEUE_CONNECTION=sync \
               ghcr.io/12atif/pelatih-registrasi-silat:latest
