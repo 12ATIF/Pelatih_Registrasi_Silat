@@ -17,13 +17,13 @@
             <div class="text-muted small text-uppercase px-3 mb-1">Manajemen</div>
         </li>
         <li class="nav-item">
-            <a href="{{ route('pelatih.kontingen.index') }}"
+            <a href="{{ route('pelatih.kontingen.index') }}" id="menu-kontingen"
                 class="nav-link {{ request()->routeIs('pelatih.kontingen.*') ? 'active' : '' }}">
                 <i class="fas fa-users me-2"></i> Kontingen
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('pelatih.peserta.index') }}"
+            <a href="{{ route('pelatih.peserta.index') }}" id="menu-peserta"
                 class="nav-link {{ request()->routeIs('pelatih.peserta.*') ? 'active' : '' }}">
                 <i class="fas fa-user-graduate me-2"></i> Peserta
             </a>
@@ -33,7 +33,7 @@
             <div class="text-muted small text-uppercase px-3 mb-1">Keuangan & Dokumen</div>
         </li>
         <li class="nav-item">
-            <a href="{{ route('pelatih.pembayaran.index') }}"
+            <a href="{{ route('pelatih.pembayaran.index') }}" id="menu-pembayaran"
                 class="nav-link {{ request()->routeIs('pelatih.pembayaran.*') ? 'active' : '' }}">
                 <i class="fas fa-money-bill-wave me-2"></i> Pembayaran
             </a>
@@ -43,10 +43,15 @@
             <div class="text-muted small text-uppercase px-3 mb-1">Pertandingan</div>
         </li>
         <li class="nav-item">
-            <a href="{{ route('pelatih.jadwal.index') }}"
+            <a href="{{ route('pelatih.jadwal.index') }}" id="menu-jadwal"
                 class="nav-link {{ request()->routeIs('pelatih.jadwal.*') ? 'active' : '' }}">
                 <i class="fas fa-calendar-alt me-2"></i> Jadwal
             </a>
+        </li>
+        <li class="nav-item mt-3">
+            <button class="btn btn-sm btn-outline-warning w-100 start-tutorial-btn">
+                <i class="fas fa-question-circle me-1"></i> Mulai Tutorial
+            </button>
         </li>
     </ul>
     <hr>
@@ -135,6 +140,12 @@
                 </a>
             </li>
         </ul>
+        
+        <div class="px-3 mt-2">
+            <button class="btn btn-sm btn-outline-warning w-100 start-tutorial-btn">
+                <i class="fas fa-question-circle me-1"></i> Mulai Tutorial
+            </button>
+        </div>
         
         <hr class="mt-3">
         <div class="d-flex align-items-center text-light">

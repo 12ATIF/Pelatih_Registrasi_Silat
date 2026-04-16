@@ -194,7 +194,7 @@
 </div>
 
 <!-- Quick Actions -->
-<div class="card shadow mb-4">
+<div class="card shadow mb-4" id="tutorial-quick-actions">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold">Aksi Cepat</h6>
     </div>
@@ -247,3 +247,56 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if(typeof window.driver === 'undefined') return;
+        
+        const driver = window.driver.js.driver;
+        const driverObj = driver({
+            showProgress: true,
+            animate: true,
+            nextBtnText: 'Lanjut',
+            prevBtnText: 'Kembali',
+            doneBtnText: 'Selesai',
+            steps: [
+                { popover: { title: 'Selamat Datang!', description: 'Mari kita kenali fitur-fitur di aplikasi Pelatih ini agar Anda lebih mudah menggunakannya.' } },
+                { element: '#menu-kontingen', popover: { title: '1. Kontingen', description: 'Tambahkan data kontingen daerah atau perguruan Anda di sini sebelum mendaftarkan peserta.', side: "right", align: 'start' } },
+                { element: '#menu-peserta', popover: { title: '2. Peserta', description: 'Setelah mempunyai kontingen, daftarkan atlet/pesilat Anda di menu ini.', side: "right", align: 'start' } },
+                { element: '#menu-pembayaran', popover: { title: '3. Pembayaran', description: 'Cek tagihan dan upload mutasi/bukti pembayaran biaya pendaftaran di sini.', side: "right", align: 'start' } },
+                { element: '#menu-jadwal', popover: { title: '4. Jadwal', description: 'Pantau jadwal pertandingan yang akan berlangsung pada event.', side: "right", align: 'start' } },
+                { element: '#tutorial-quick-actions', popover: { title: 'Aksi Cepat', description: 'Gunakan tombol-tombol jalan pintas ini untuk langsung menuju menu yang paling sering dilakukan.', side: "top", align: 'center' } }
+            ]
+        });
+
+        const tutorialDone = localStorage.getItem('tutorial_pelatih_completed');
+        if (!tutorialDone) {
+            // Beri jeda sedikit agar halaman selesai render dengan sempurna
+            setTimeout(() => {
+                driverObj.drive();
+                localStorage.setItem('tutorial_pelatih_completed', 'true');
+            }, 500);
+        }
+
+        // Trigger manual
+        const startBtns = document.querySelectorAll('.start-tutorial-btn');
+        startBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Tutup offcanvas mobile jika sedang terbuka agar tutorial fokus ke elemen desktop
+                const offcanvasEl = document.getElementById('sidebarMenu');
+                if (offcanvasEl) {
+                    const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+                    if (offcanvas) offcanvas.hide();
+                }
+                
+                setTimeout(() => {
+                    driverObj.drive();
+                }, 300);
+            });
+        });
+    });
+</script>
+@endpush
