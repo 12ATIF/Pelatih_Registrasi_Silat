@@ -8,6 +8,9 @@ while ! php -r "try { new PDO('pgsql:host='.getenv('DB_HOST').';dbname='.getenv(
 done
 echo "Database is ready!"
 
+echo "Running migrations..."
+php artisan migrate --force
+
 echo "Caching config, routes, and views..."
 php artisan config:cache
 php artisan route:cache
