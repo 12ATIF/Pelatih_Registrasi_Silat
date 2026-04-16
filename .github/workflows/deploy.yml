@@ -1,117 +1,46 @@
-name: 🚀 Deploy Pelatih Silat
+name: Deploy Pelatih Registrasi Silat
 
 on:
   push:
-    branches: [main, master]
-  workflow_dispatch:
-
-env:
-  IMAGE_NAME: ghcr.io/12atif/pelatih-registrasi-silat
+    branches:
+      - main
 
 jobs:
-  test:
-    name: 🧪 Test
+  build-and-deploy:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_DB: silat_test
-          POSTGRES_USER: silat_user
-          POSTGRES_PASSWORD: test_password
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports: [5432:5432]
     steps:
-      - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: pdo, pdo_pgsql, mbstring, xml, zip, bcmath, gd
-      - uses: actions/cache@v4
-        with:
-          path: vendor
-          key: composer-${{ hashFiles('composer.lock') }}
-      - run: composer install --no-dev --optimize-autoloader --no-interaction
-      - run: |
-          cp .env.example .env
-          php artisan key:generate
-          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=pgsql/' .env
-          sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-          sed -i 's/DB_PORT=.*/DB_PORT=5432/' .env
-          sed -i 's/DB_DATABASE=.*/DB_DATABASE=silat_test/' .env
-          sed -i 's/DB_USERNAME=.*/DB_USERNAME=silat_user/' .env
-          sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=test_password/' .env
-      - run: php artisan migrate --force
-      - run: php artisan test 2>/dev/null || echo "No tests, skipping."
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-  build:
-    name: 🐳 Build & Push
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/metadata-action@v5
-        id: meta
-        with:
-          images: ${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,prefix=sha-
-      - uses: docker/build-push-action@v5
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ghcr.io/12atif/pelatih-registrasi-silat:latest
 
-  deploy:
-    name: 🌐 Deploy ke VPS
-    runs-on: ubuntu-latest
-    needs: build
-    environment: production
-    steps:
-      - uses: appleboy/ssh-action@v1
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            set -e
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ${{ env.IMAGE_NAME }}:latest
-            docker network create silat_net 2>/dev/null || true
-            docker stop silat_pelatih 2>/dev/null || true
-            docker rm   silat_pelatih 2>/dev/null || true
-            docker run -d \
-              --name silat_pelatih \
-              --network silat_net \
-              --restart always \
-              -p 8002:80 \
-              -e APP_ENV=production \
-              -e APP_DEBUG=false \
-              -e APP_URL=https://unperopen.com \
-              -e APP_KEY="${{ secrets.APP_KEY_PELATIH }}" \
-              -e DB_CONNECTION=pgsql \
+            docker pull ghcr.io/12atif/pelatih-registrasi-silat:latest
+            docker stop silat_pelatih || true
+            docker rm silat_pelatih || true
+            docker run -d -p 8002:80 --name silat_pelatih --network silat_net \
               -e DB_HOST=silat_db \
-              -e DB_PORT=5432 \
-              -e DB_DATABASE=silat_db \
-              -e DB_USERNAME=silat_user \
-              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              ${{ env.IMAGE_NAME }}:latest
-            docker image prune -f
-            echo "✅ Pelatih deployed!"
-      - name: Health Check
-        run: |
-          sleep 20
-          curl -f http://${{ secrets.VPS_HOST }}:8002/health || echo "⚠️ Cek container manual."
+              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e APP_KEY=${{ secrets.APP_KEY_PELATIH }} \
+              ghcr.io/12atif/pelatih-registrasi-silat:latest
