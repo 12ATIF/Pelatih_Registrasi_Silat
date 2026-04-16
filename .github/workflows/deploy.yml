@@ -44,6 +44,7 @@ jobs:
             docker stop silat_pelatih || true
             docker rm silat_pelatih || true
             docker run -d -p 8002:80 --name silat_pelatih --network silat_net \
+              -v /var/silat/storage/app/public:/var/www/app/storage/app/public \
               -e APP_ENV=production \
               -e APP_KEY=${{ secrets.APP_KEY_PELATIH }} \
               -e APP_URL=https://unperopen.com \
