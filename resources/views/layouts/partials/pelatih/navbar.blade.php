@@ -4,7 +4,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         
-        <a class="navbar-brand d-md-none fw-bold brand-text-orange" href="#" style="font-size: 1.1rem;">
+        <a class="navbar-brand d-md-none fw-bold brand-text-orange d-flex align-items-center" href="{{ route('pelatih.dashboard') }}" style="font-size: 1.1rem;">
+            <img src="{{ asset('app/img/MASKOT.png') }}" alt="Logo" height="32" class="me-2 rounded">
             @yield('title')
         </a>
         
