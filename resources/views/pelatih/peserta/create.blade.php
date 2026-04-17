@@ -215,6 +215,10 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="text-muted mt-1">Format: JPG, JPEG, PNG, atau PDF. Maks 5MB.</small>
+                        <div id="dokumen_kk_error" class="alert alert-danger mt-2 py-2" style="display:none;">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            <span id="dokumen_kk_error_msg"></span>
+                        </div>
                     </div>
                 </div>
 
@@ -231,6 +235,10 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <small class="text-muted mt-1">Format: JPG, JPEG, atau PNG. Maks 5MB.</small>
+                        <div id="dokumen_foto_error" class="alert alert-danger mt-2 py-2" style="display:none;">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            <span id="dokumen_foto_error_msg"></span>
+                        </div>
                         <div id="foto-preview" class="mt-2" style="display: none;">
                             <img id="foto-preview-img" src="" alt="Preview Foto"
                                 class="img-thumbnail" style="max-height: 150px;">
@@ -353,6 +361,34 @@
             $(this).closest('.dokumen-row').remove();
         });
         */
+
+        // === File Size Validation ===
+        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+        function checkFileSize(inputId, errorDivId, errorMsgId) {
+            const input = document.getElementById(inputId);
+            const errorDiv = document.getElementById(errorDivId);
+            const errorMsg = document.getElementById(errorMsgId);
+            const file = input.files[0];
+
+            if (file && file.size > MAX_FILE_SIZE) {
+                const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+                errorMsg.textContent = `Ukuran file terlalu besar (${sizeMB} MB). Maksimal 5MB.`;
+                errorDiv.style.display = 'block';
+                input.value = '';
+                return false;
+            }
+            errorDiv.style.display = 'none';
+            return true;
+        }
+
+        $('#dokumen_kk').on('change', function() {
+            checkFileSize('dokumen_kk', 'dokumen_kk_error', 'dokumen_kk_error_msg');
+        });
+
+        $('#dokumen_foto').on('change', function() {
+            checkFileSize('dokumen_foto', 'dokumen_foto_error', 'dokumen_foto_error_msg');
+        });
 
         // === Foto Preview ===
         $('#dokumen_foto').on('change', function() {
@@ -478,6 +514,14 @@
         // Validate on form submit
         $('form').on('submit', function(e) {
             if (!validateAge()) {
+                e.preventDefault();
+                return false;
+            }
+
+            // File size validation on submit
+            const kkOk = checkFileSize('dokumen_kk', 'dokumen_kk_error', 'dokumen_kk_error_msg');
+            const fotoOk = checkFileSize('dokumen_foto', 'dokumen_foto_error', 'dokumen_foto_error_msg');
+            if (!kkOk || !fotoOk) {
                 e.preventDefault();
                 return false;
             }

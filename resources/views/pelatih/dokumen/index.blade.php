@@ -135,11 +135,15 @@
                        <label for="file" class="form-label">File <span class="text-danger">*</span></label>
                        <input type="file" class="form-control" id="file" name="file" accept=".jpg,.jpeg,.png,.pdf" required>
                        <div class="form-text">Format yang diterima: JPG, JPEG, PNG, atau PDF. Maksimal 5MB.</div>
+                       <div id="file_size_error" class="alert alert-danger mt-2 py-2" style="display:none;">
+                           <i class="fas fa-exclamation-triangle me-1"></i>
+                           <span id="file_size_error_msg"></span>
+                       </div>
                    </div>
                </div>
                <div class="modal-footer">
                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                   <button type="submit" class="btn btn-success">Upload</button>
+                   <button type="submit" class="btn btn-success" id="btn_upload_dokumen">Upload</button>
                </div>
            </form>
        </div>
@@ -160,6 +164,26 @@
            responsive: true
        });
        
+       // File size validation
+       $('#file').on('change', function() {
+           const maxSize = 5 * 1024 * 1024; // 5MB
+           const file = this.files[0];
+           const errorDiv = document.getElementById('file_size_error');
+           const errorMsg = document.getElementById('file_size_error_msg');
+           const submitBtn = document.getElementById('btn_upload_dokumen');
+
+           if (file && file.size > maxSize) {
+               const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+               errorMsg.textContent = `Ukuran file terlalu besar (${sizeMB} MB). Maksimal 5MB.`;
+               errorDiv.style.display = 'block';
+               submitBtn.disabled = true;
+               this.value = '';
+           } else {
+               errorDiv.style.display = 'none';
+               submitBtn.disabled = false;
+           }
+       });
+
        // Delete Dokumen
        $('.delete-dokumen').on('click', function() {
            const id = $(this).data('id');
