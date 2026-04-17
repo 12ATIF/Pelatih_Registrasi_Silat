@@ -69,43 +69,43 @@ class DokumenPesertaController extends Controller
         // Cari peserta dan pastikan milik pelatih
         $kontingenIds = Auth::guard('pelatih')->user()->kontingens()->pluck('id')->toArray();
         Peserta::whereIn('kontingen_id', $kontingenIds)->findOrFail($pesertaId);
-        
+
         // Cari dokumen
         $dokumen = DokumenPeserta::where('peserta_id', $pesertaId)->findOrFail($id);
-        
-        if (!Storage::exists($dokumen->file_path)) {
+
+        if (!Storage::disk('public')->exists($dokumen->file_path)) {
             abort(404, 'File tidak ditemukan.');
         }
-        
+
         if (request()->expectsJson()) {
-            return response()->json(['dokumen' => $dokumen, 'url' => Storage::url($dokumen->file_path)]);
+            return response()->json(['dokumen' => $dokumen, 'url' => Storage::disk('public')->url($dokumen->file_path)]);
         }
-        
+
         return view('pelatih.dokumen.show', compact('dokumen'));
     }
-    
+
     public function download($pesertaId, $id)
     {
         // Cari peserta dan pastikan milik pelatih
         $kontingenIds = Auth::guard('pelatih')->user()->kontingens()->pluck('id')->toArray();
         Peserta::whereIn('kontingen_id', $kontingenIds)->findOrFail($pesertaId);
-        
+
         // Cari dokumen
         $dokumen = DokumenPeserta::where('peserta_id', $pesertaId)->findOrFail($id);
-        
-        if (!Storage::exists($dokumen->file_path)) {
+
+        if (!Storage::disk('public')->exists($dokumen->file_path)) {
             abort(404, 'File tidak ditemukan.');
         }
-        
-        return Storage::download($dokumen->file_path);
+
+        return Storage::disk('public')->download($dokumen->file_path);
     }
-    
+
     public function destroy($pesertaId, $id)
     {
         // Cari peserta dan pastikan milik pelatih
         $kontingenIds = Auth::guard('pelatih')->user()->kontingens()->pluck('id')->toArray();
         $peserta = Peserta::whereIn('kontingen_id', $kontingenIds)->findOrFail($pesertaId);
-        
+
         // Hanya dapat menghapus jika status verifikasi masih pending
         if ($peserta->status_verifikasi !== 'pending') {
             if (request()->expectsJson()) {
@@ -113,13 +113,13 @@ class DokumenPesertaController extends Controller
             }
             return back()->with('error', 'Tidak dapat menghapus dokumen peserta yang sudah diverifikasi.');
         }
-        
+
         // Cari dokumen
         $dokumen = DokumenPeserta::where('peserta_id', $pesertaId)->findOrFail($id);
-        
+
         // Hapus file
-        if (Storage::exists($dokumen->file_path)) {
-            Storage::delete($dokumen->file_path);
+        if (Storage::disk('public')->exists($dokumen->file_path)) {
+            Storage::disk('public')->delete($dokumen->file_path);
         }
         
         // Hapus dokumen
