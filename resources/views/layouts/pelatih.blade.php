@@ -203,8 +203,32 @@
         .border-left-danger { border-left: 4px solid #e74a3b; } /* Merah tetap untuk danger */
         .border-left-info { border-left: 4px solid #36b9cc; } /* Biru muda tetap untuk info atau bisa diganti */
 
+        /* === Driver.js Mobile Responsiveness === */
+        @media (max-width: 767.98px) {
+            .driver-popover {
+                max-width: 290px !important;
+                padding: 12px !important;
+            }
+            .driver-popover .driver-popover-title {
+                font-size: 0.95rem !important;
+            }
+            .driver-popover .driver-popover-description {
+                font-size: 0.85rem !important;
+                line-height: 1.4 !important;
+            }
+            .driver-popover-footer {
+                gap: 4px !important;
+            }
+            .driver-popover-footer .driver-popover-btn {
+                padding: 4px 10px !important;
+                font-size: 0.8rem !important;
+            }
+            .driver-popover-progress-text {
+                font-size: 0.75rem !important;
+            }
+        }
     </style>
-    
+
     @stack('styles')
 </head>
 <body>

@@ -60,8 +60,8 @@
                     </select>
                 </div>
             </div>
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary me-2">
+            <div class="d-flex justify-content-end filter-actions-mobile gap-2">
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-filter"></i> Filter
                 </button>
                 <a href="{{ route('pelatih.jadwal.index') }}" class="btn btn-secondary">
@@ -89,7 +89,8 @@
     </div>
     <div class="card-body">
         @if($jadwals->count() > 0)
-            <div class="table-responsive">
+            {{-- Desktop: Tabel --}}
+            <div class="table-responsive jadwal-desktop-table">
                 <table class="table table-bordered" id="jadwal-table">
                     <thead>
                         <tr>
@@ -123,6 +124,45 @@
                     </tbody>
                 </table>
             </div>
+
+            {{-- Mobile: Card List --}}
+            <div class="jadwal-mobile-card">
+                @foreach($jadwals as $jadwal)
+                <div class="card jadwal-card-item shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h6 class="mb-0 fw-bold" style="font-size: 0.9rem;">
+                                {{ $jadwal->subkategoriLomba->nama }}
+                            </h6>
+                            <a href="{{ route('pelatih.jadwal.show', $jadwal->id) }}" class="btn btn-sm btn-outline-info py-0 px-2" style="font-size: 0.75rem;">
+                                <i class="fas fa-eye"></i> Detail
+                            </a>
+                        </div>
+                        <p class="text-muted mb-2" style="font-size: 0.8rem;">
+                            {{ $jadwal->pertandingan->nama_event }}
+                        </p>
+                        <div class="jadwal-meta">
+                            <span class="badge bg-primary">
+                                <i class="fas fa-calendar-day me-1"></i>{{ date('d/m/Y', strtotime($jadwal->tanggal)) }}
+                            </span>
+                            <span class="badge bg-dark">
+                                <i class="fas fa-clock me-1"></i>{{ $jadwal->waktu_mulai }} - {{ $jadwal->waktu_selesai ?: 'Selesai' }}
+                            </span>
+                            <span class="badge bg-warning text-dark">
+                                {{ $jadwal->subkategoriLomba->kategoriLomba->nama }}
+                            </span>
+                            <span class="badge bg-success">
+                                {{ $jadwal->kelompokUsia->nama }}
+                            </span>
+                        </div>
+                        <div class="mt-2" style="font-size: 0.78rem;">
+                            <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                            <span class="text-muted">{{ $jadwal->lokasi_detail ?: $jadwal->pertandingan->lokasi_umum }}</span>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         @else
             <div class="text-center py-5">
                 <div class="mb-3">
@@ -145,6 +185,71 @@
     .fc-event {
         cursor: pointer;
     }
+
+    /* === Jadwal Mobile Card === */
+    .jadwal-mobile-card {
+        display: none;
+    }
+
+    @media (max-width: 767.98px) {
+        #calendar {
+            height: 450px;
+        }
+        /* FullCalendar toolbar responsive */
+        .fc .fc-toolbar {
+            flex-direction: column;
+            gap: 8px;
+        }
+        .fc .fc-toolbar-title {
+            font-size: 1.1rem !important;
+        }
+        .fc .fc-button {
+            padding: 4px 8px !important;
+            font-size: 0.78rem !important;
+        }
+        .fc .fc-toolbar-chunk {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Sembunyikan tabel desktop, tampilkan card mobile */
+        .jadwal-desktop-table {
+            display: none !important;
+        }
+        .jadwal-mobile-card {
+            display: block;
+        }
+        .jadwal-card-item {
+            border-left: 4px solid #F97A16;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            transition: box-shadow 0.2s;
+        }
+        .jadwal-card-item:active {
+            box-shadow: 0 0 0 3px rgba(249, 122, 22, 0.25);
+        }
+        .jadwal-card-item .card-body {
+            padding: 12px !important;
+        }
+        .jadwal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .jadwal-meta .badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Filter form mobile */
+        .filter-actions-mobile {
+            flex-direction: column;
+        }
+        .filter-actions-mobile .btn {
+            width: 100%;
+        }
+    }
 </style>
 @endpush
 
@@ -159,13 +264,12 @@
         
         // Calendar
         var calendarEl = document.getElementById('calendar');
+        var isMobile = window.innerWidth < 768;
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-           },
+            initialView: isMobile ? 'listMonth' : 'dayGridMonth',
+            headerToolbar: isMobile
+                ? { left: 'prev,next', center: 'title', right: 'listMonth,dayGridMonth' }
+                : { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth' },
            buttonText: {
                today: 'Hari ini',
                month: 'Bulan',

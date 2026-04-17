@@ -9,7 +9,7 @@
 @section('content')
 <!-- Statistik Utama -->
 <div class="row">
-    <div class="col-xl-3 col-md-6 col-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4" id="stat-kontingen">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 col-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4" id="stat-peserta">
         <div class="card border-left-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 col-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4" id="stat-verifikasi">
         <div class="card border-left-warning shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 col-6 mb-4">
+    <div class="col-xl-3 col-md-6 col-6 mb-4" id="stat-belum-bayar">
         <div class="card border-left-danger shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -79,7 +79,7 @@
 </div>
 
 <!-- Progress Pembayaran -->
-<div class="card shadow mb-4">
+<div class="card shadow mb-4" id="card-progress-pembayaran">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold">Progress Pembayaran</h6>
     </div>
@@ -252,27 +252,49 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         if(typeof window.driver === 'undefined') return;
-        
+
         const driver = window.driver.js.driver;
+        const isMobile = window.innerWidth < 768;
+
+        // Steps untuk desktop — target sidebar menu
+        const desktopSteps = [
+            { popover: { title: 'Selamat Datang!', description: 'Mari kita kenali fitur-fitur di aplikasi Pelatih ini agar Anda lebih mudah menggunakannya.' } },
+            { element: '#menu-kontingen', popover: { title: '1. Kontingen', description: 'Tambahkan data kontingen daerah atau perguruan Anda di sini sebelum mendaftarkan peserta.', side: "right", align: 'start' } },
+            { element: '#menu-peserta', popover: { title: '2. Peserta', description: 'Setelah mempunyai kontingen, daftarkan atlet/pesilat Anda di menu ini.', side: "right", align: 'start' } },
+            { element: '#menu-pembayaran', popover: { title: '3. Pembayaran', description: 'Cek tagihan dan upload mutasi/bukti pembayaran biaya pendaftaran di sini.', side: "right", align: 'start' } },
+            { element: '#menu-jadwal', popover: { title: '4. Jadwal', description: 'Pantau jadwal pertandingan yang akan berlangsung pada event.', side: "right", align: 'start' } },
+            { element: '#tutorial-quick-actions', popover: { title: 'Aksi Cepat', description: 'Gunakan tombol-tombol jalan pintas ini untuk langsung menuju menu yang paling sering dilakukan.', side: "top", align: 'center' } }
+        ];
+
+        // Steps untuk mobile — target elemen dashboard yang terlihat
+        const mobileSteps = [
+            { popover: { title: 'Selamat Datang! 👋', description: 'Mari kita kenali fitur-fitur di aplikasi Pelatih ini. Geser untuk melanjutkan tutorial.' } },
+            { element: '#stat-kontingen', popover: { title: '1. Kontingen', description: 'Lihat jumlah kontingen Anda di sini. Buat kontingen melalui menu navigasi (☰) di pojok kiri atas.', side: "bottom", align: 'start' } },
+            { element: '#stat-peserta', popover: { title: '2. Peserta', description: 'Statistik jumlah peserta yang sudah terdaftar di kontingen Anda.', side: "bottom", align: 'start' } },
+            { element: '#stat-verifikasi', popover: { title: '3. Status Pembayaran', description: 'Pantau berapa pembayaran yang menunggu verifikasi admin.', side: "bottom", align: 'start' } },
+            { element: '#stat-belum-bayar', popover: { title: '4. Belum Bayar', description: 'Jumlah peserta yang belum melakukan pembayaran.', side: "bottom", align: 'start' } },
+            { element: '#card-progress-pembayaran', popover: { title: '5. Progress Pembayaran', description: 'Lihat progres keseluruhan pembayaran kontingen Anda di sini.', side: "top", align: 'center' } },
+            { element: '#tutorial-quick-actions', popover: { title: '6. Aksi Cepat', description: 'Jalan pintas untuk langsung menambah peserta, bayar, lihat jadwal, dan lainnya.', side: "top", align: 'center' } },
+            { popover: { title: 'Menu Navigasi ☰', description: 'Untuk mengakses semua fitur (Kontingen, Peserta, Pembayaran, Jadwal), tap tombol ☰ di pojok kiri atas layar.' } }
+        ];
+
         const driverObj = driver({
             showProgress: true,
             animate: true,
-            nextBtnText: 'Lanjut',
+            allowClose: true,
+            overlayClickNext: isMobile, // Tap overlay untuk lanjut di mobile
+            nextBtnText: isMobile ? 'Lanjut ➜' : 'Lanjut',
             prevBtnText: 'Kembali',
-            doneBtnText: 'Selesai',
-            steps: [
-                { popover: { title: 'Selamat Datang!', description: 'Mari kita kenali fitur-fitur di aplikasi Pelatih ini agar Anda lebih mudah menggunakannya.' } },
-                { element: '#menu-kontingen', popover: { title: '1. Kontingen', description: 'Tambahkan data kontingen daerah atau perguruan Anda di sini sebelum mendaftarkan peserta.', side: "right", align: 'start' } },
-                { element: '#menu-peserta', popover: { title: '2. Peserta', description: 'Setelah mempunyai kontingen, daftarkan atlet/pesilat Anda di menu ini.', side: "right", align: 'start' } },
-                { element: '#menu-pembayaran', popover: { title: '3. Pembayaran', description: 'Cek tagihan dan upload mutasi/bukti pembayaran biaya pendaftaran di sini.', side: "right", align: 'start' } },
-                { element: '#menu-jadwal', popover: { title: '4. Jadwal', description: 'Pantau jadwal pertandingan yang akan berlangsung pada event.', side: "right", align: 'start' } },
-                { element: '#tutorial-quick-actions', popover: { title: 'Aksi Cepat', description: 'Gunakan tombol-tombol jalan pintas ini untuk langsung menuju menu yang paling sering dilakukan.', side: "top", align: 'center' } }
-            ]
+            doneBtnText: 'Selesai ✓',
+            popoverOffset: isMobile ? 8 : 10,
+            steps: isMobile ? mobileSteps : desktopSteps,
+            onDestroyStarted: function() {
+                driverObj.destroy();
+            }
         });
 
         const tutorialDone = localStorage.getItem('tutorial_pelatih_completed');
         if (!tutorialDone) {
-            // Beri jeda sedikit agar halaman selesai render dengan sempurna
             setTimeout(() => {
                 driverObj.drive();
                 localStorage.setItem('tutorial_pelatih_completed', 'true');
@@ -284,14 +306,14 @@
         startBtns.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                
-                // Tutup offcanvas mobile jika sedang terbuka agar tutorial fokus ke elemen desktop
+
+                // Tutup offcanvas mobile jika sedang terbuka
                 const offcanvasEl = document.getElementById('sidebarMenu');
                 if (offcanvasEl) {
                     const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
                     if (offcanvas) offcanvas.hide();
                 }
-                
+
                 setTimeout(() => {
                     driverObj.drive();
                 }, 300);
