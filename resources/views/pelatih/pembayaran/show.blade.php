@@ -98,10 +98,13 @@
                             <h5>Bukti Transfer Yang Diunggah</h5>
                             <img src="{{ Storage::url($pembayaran->bukti_transfer) }}" alt="Bukti Transfer" class="img-fluid mt-2" style="max-height: 400px;">
                             
-                            <div class="mt-3">
+                            <div class="mt-3 d-flex gap-2 justify-content-center">
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#uploadBuktiModal">
                                     <i class="fas fa-upload me-1"></i> Upload Ulang
                                 </button>
+                                <a href="https://wa.me/6285722703725?text={{ urlencode('Halo, saya ' . auth()->guard('pelatih')->user()->nama . ' sudah upload bukti transfer pembayaran untuk kontingen ' . $kontingen->nama . '. Mohon segera diverifikasi. Terima kasih.') }}" target="_blank" class="btn btn-success">
+                                    <i class="fab fa-whatsapp me-1"></i> Konfirmasi WhatsApp
+                                </a>
                             </div>
                         </div>
                         @endif
@@ -120,9 +123,9 @@
                                 <p>Transfer ke rekening berikut:</p>
                                 <div class="d-flex justify-content-center">
                                     <div class="text-start">
-                                        <p><strong>Bank:</strong> Bank XYZ</p>
-                                        <p><strong>No. Rekening:</strong> 1234567890</p>
-                                        <p><strong>Atas Nama:</strong> Panitia Pencak Silat</p>
+                                        <p><strong>Bank:</strong> SeaBank</p>
+                                        <p><strong>No. Rekening:</strong> 901463381712</p>
+                                        <p><strong>Atas Nama:</strong> Negi Rahmah Azizia</p>
                                     </div>
                                 </div>
                             </div>
@@ -208,6 +211,11 @@
 
 @push('scripts')
 <script>
+@if(session('show_wa'))
+const waMsg = encodeURIComponent('Halo, saya {{ auth()->guard("pelatih")->user()->nama }} sudah upload bukti transfer pembayaran untuk kontingen {{ $kontingen->nama }}. Mohon segera diverifikasi. Terima kasih.');
+window.open('https://wa.me/6285722703725?text=' + waMsg, '_blank');
+@endif
+
 document.getElementById('bukti_transfer').addEventListener('change', function() {
     const maxSize = 5 * 1024 * 1024; // 5MB
     const file = this.files[0];

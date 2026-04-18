@@ -125,7 +125,7 @@ class PembayaranController extends Controller
             return response()->json(['message' => 'Bukti transfer berhasil diunggah.', 'pembayaran' => $pembayaran]);
         }
         
-        return redirect()->route('pelatih.pembayaran.show', $pembayaran->id)->with('success', 'Bukti transfer berhasil diunggah.');
+        return redirect()->route('pelatih.pembayaran.show', $pembayaran->id)->with('success', 'Bukti transfer berhasil diunggah.')->with('show_wa', true);
     }
     
     public function hitungUlangTagihan($id)
