@@ -324,5 +324,85 @@
     </script>
     
     @stack('scripts')
+
+    {{-- Floating WhatsApp Button --}}
+    <style>
+        .wa-float {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .wa-float-btn {
+            width: 56px;
+            height: 56px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.6rem;
+            box-shadow: 0 4px 16px rgba(37,211,102,0.5);
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .wa-float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37,211,102,0.6);
+            color: white;
+        }
+        .wa-float-btn::before {
+            content: '';
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(37,211,102,0.4);
+            animation: wa-pulse 2s infinite;
+        }
+        @keyframes wa-pulse {
+            0%   { transform: scale(1); opacity: 0.8; }
+            70%  { transform: scale(1.6); opacity: 0; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .wa-tooltip {
+            background: #fff;
+            color: #111;
+            font-size: 0.82rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: opacity 0.2s, transform 0.2s;
+            pointer-events: none;
+        }
+        .wa-float:hover .wa-tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        @media (max-width: 767.98px) {
+            .wa-float { bottom: 108px; right: 16px; }
+            .wa-float-btn { width: 50px; height: 50px; font-size: 1.4rem; }
+            .wa-float-btn::before { width: 50px; height: 50px; }
+            .wa-tooltip { display: none; }
+        }
+    </style>
+
+    <div class="wa-float">
+        <span class="wa-tooltip"><i class="fab fa-whatsapp me-1 text-success"></i> Hubungi Admin</span>
+        <a href="https://wa.me/6285722703725?text={{ urlencode('Halo Admin, saya ' . (auth()->guard('pelatih')->check() ? auth()->guard('pelatih')->user()->nama : 'pengguna') . ' ingin bertanya mengenai sistem registrasi pencak silat.') }}"
+            target="_blank" class="wa-float-btn" title="Hubungi Admin via WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
 </body>
 </html>
