@@ -74,28 +74,22 @@ class JadwalPertandinganController extends Controller
     {
         $jadwal = JadwalPertandingan::with(['pertandingan', 'subkategoriLomba.kategoriLomba', 'kelompokUsia'])->findOrFail($id);
         
-        // Get peserta yang relevan dengan jadwal
-        $query = \App\Models\Peserta::where('subkategori_id', $jadwal->subkategori_id)
+        // Hanya tampilkan peserta milik pelatih yang login
+        $kontingenIds = Auth::guard('pelatih')->user()->kontingens()->pluck('id')->toArray();
+        $pesertaPelatih = \App\Models\Peserta::where('subkategori_id', $jadwal->subkategori_id)
             ->where('kelompok_usia_id', $jadwal->kelompok_usia_id)
             ->where('status_verifikasi', 'valid')
-            ->with('kontingen');
-            
-        // Filter hanya peserta milik pelatih jika diinginkan
-        $pelatihId = Auth::guard('pelatih')->id();
-        $kontingenIds = Auth::guard('pelatih')->user()->kontingens()->pluck('id')->toArray();
-        $allPesertas = $query->get();
-        $pesertaPelatih = $allPesertas->filter(function($peserta) use ($kontingenIds) {
-            return in_array($peserta->kontingen_id, $kontingenIds);
-        });
-        
+            ->whereIn('kontingen_id', $kontingenIds)
+            ->with('kontingen')
+            ->get();
+
         if (request()->expectsJson()) {
             return response()->json([
-                'jadwal' => $jadwal,
-                'all_pesertas' => $allPesertas,
+                'jadwal'          => $jadwal,
                 'peserta_pelatih' => $pesertaPelatih,
             ]);
         }
-        
-        return view('pelatih.jadwal.show', compact('jadwal', 'allPesertas', 'pesertaPelatih'));
+
+        return view('pelatih.jadwal.show', compact('jadwal', 'pesertaPelatih'));
     }
 }

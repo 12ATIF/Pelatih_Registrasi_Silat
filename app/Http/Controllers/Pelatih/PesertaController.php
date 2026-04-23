@@ -58,7 +58,7 @@ class PesertaController extends Controller
         }
         
         // Load relationships
-        $pesertas = $query->with(['kontingen', 'subkategoriLomba.kategoriLomba', 'kelompokUsia', 'kelasTanding'])->get();
+        $pesertas = $query->with(['kontingen', 'subkategoriLomba.kategoriLomba', 'kelompokUsia', 'kelasTanding'])->paginate(20);
         
         if ($request->expectsJson()) {
             return response()->json($pesertas);
@@ -90,8 +90,8 @@ class PesertaController extends Controller
             'nik' => 'required|string|size:16',
             'jenis_kelamin' => 'required|in:L,P',
             'tanggal_lahir' => 'required|date',
-            'berat_badan' => 'required|numeric|min:0',
-            'tinggi_badan' => 'required|numeric|min:0',
+            'berat_badan' => 'required|numeric|min:20|max:300',
+            'tinggi_badan' => 'required|numeric|min:100|max:250',
             'subkategori_id' => 'required|exists:subkategori_lomba,id',
             'kelompok_usia_id' => 'required|exists:kelompok_usia,id',
             // Dokumen wajib
@@ -195,36 +195,36 @@ class PesertaController extends Controller
         
         // Upload Kartu Keluarga
         if ($request->hasFile('dokumen_kk')) {
-            $fileKk = $request->file('dokumen_kk');
-            $fileNameKk = time() . '_kk_' . $fileKk->getClientOriginalName();
+            $fileKk     = $request->file('dokumen_kk');
+            $fileNameKk = time() . '_kk_' . \Illuminate\Support\Str::slug(pathinfo($fileKk->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $fileKk->getClientOriginalExtension();
             $filePathKk = $fileKk->storeAs('dokumen_peserta/' . $peserta->id, $fileNameKk, 'public');
             DokumenPeserta::create([
-                'peserta_id' => $peserta->id,
+                'peserta_id'    => $peserta->id,
                 'jenis_dokumen' => 'Kartu Keluarga',
-                'file_path' => $filePathKk,
+                'file_path'     => $filePathKk,
             ]);
             $dokumenCount++;
         }
-        
+
         // Upload Foto Peserta
         if ($request->hasFile('dokumen_foto')) {
-            $fileFoto = $request->file('dokumen_foto');
-            $fileNameFoto = time() . '_foto_' . $fileFoto->getClientOriginalName();
+            $fileFoto     = $request->file('dokumen_foto');
+            $fileNameFoto = time() . '_foto_' . \Illuminate\Support\Str::slug(pathinfo($fileFoto->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $fileFoto->getClientOriginalExtension();
             $filePathFoto = $fileFoto->storeAs('dokumen_peserta/' . $peserta->id, $fileNameFoto, 'public');
             DokumenPeserta::create([
-                'peserta_id' => $peserta->id,
+                'peserta_id'    => $peserta->id,
                 'jenis_dokumen' => 'Foto Peserta',
-                'file_path' => $filePathFoto,
+                'file_path'     => $filePathFoto,
             ]);
             $dokumenCount++;
         }
-        
+
         // Upload dokumen tambahan (opsional)
         if ($request->has('dokumen')) {
             foreach ($request->input('dokumen') as $index => $dokumenData) {
                 if ($request->hasFile("dokumen.{$index}.file") && !empty($dokumenData['jenis_dokumen'])) {
-                    $file = $request->file("dokumen.{$index}.file");
-                    $fileName = time() . '_' . $index . '_' . $file->getClientOriginalName();
+                    $file     = $request->file("dokumen.{$index}.file");
+                    $fileName = time() . '_' . $index . '_' . \Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
                     $filePath = $file->storeAs('dokumen_peserta/' . $peserta->id, $fileName, 'public');
                     
                     DokumenPeserta::create([
@@ -296,11 +296,11 @@ class PesertaController extends Controller
             'nama' => 'required|string|max:255',
             'jenis_kelamin' => 'required|in:L,P',
             'tanggal_lahir' => 'required|date',
-            'berat_badan' => 'required|numeric|min:0',
+            'berat_badan' => 'required|numeric|min:20|max:300',
             'subkategori_id' => 'required|exists:subkategori_lomba,id',
             'kelompok_usia_id' => 'required|exists:kelompok_usia,id',
         ]);
-        
+
         if ($validator->fails()) {
             if ($request->expectsJson()) {
                 return response()->json(['errors' => $validator->errors()], 422);

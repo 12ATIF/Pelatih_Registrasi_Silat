@@ -130,16 +130,16 @@
     </div>
 </div>
 
-<!-- Semua Peserta di Jadwal Ini -->
+<!-- Peserta Saya di Jadwal Ini -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold">
-            <i class="fas fa-users me-1"></i> Semua Peserta
-            <span class="badge bg-secondary ms-1">{{ $allPesertas->count() }}</span>
+            <i class="fas fa-users me-1"></i> Peserta Saya
+            <span class="badge bg-secondary ms-1">{{ $pesertaPelatih->count() }}</span>
         </h6>
     </div>
     <div class="card-body">
-        @if($allPesertas->count() > 0)
+        @if($pesertaPelatih->count() > 0)
             {{-- Desktop --}}
             <div class="table-responsive d-none d-md-block">
                 <table class="table table-bordered table-sm">
@@ -152,7 +152,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($allPesertas as $i => $peserta)
+                        @foreach($pesertaPelatih as $i => $peserta)
                         <tr>
                             <td>{{ $i + 1 }}</td>
                             <td>{{ $peserta->nama }}</td>
@@ -165,7 +165,7 @@
             </div>
             {{-- Mobile --}}
             <div class="d-md-none">
-                @foreach($allPesertas as $i => $peserta)
+                @foreach($pesertaPelatih as $i => $peserta)
                 <div class="d-flex align-items-center py-2 {{ !$loop->last ? 'border-bottom' : '' }}">
                     <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 32px; height: 32px; font-size: 0.8rem;">
                         {{ $i + 1 }}
@@ -182,7 +182,7 @@
         @else
             <div class="text-center py-3">
                 <i class="fas fa-info-circle text-muted fa-2x mb-2"></i>
-                <p class="mb-0 text-muted">Belum ada peserta terdaftar di jadwal ini.</p>
+                <p class="mb-0 text-muted">Belum ada peserta Anda di jadwal ini.</p>
             </div>
         @endif
     </div>

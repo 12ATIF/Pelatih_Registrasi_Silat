@@ -8,9 +8,13 @@ Route::get('/', function () {
 // Guest routes for pelatih
 Route::prefix('pelatih')->group(function () {
     Route::get('login', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'showLoginForm'])->name('pelatih.login.form');
-    Route::post('login', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'login'])->name('pelatih.login');
+    Route::post('login', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'login'])
+        ->middleware('throttle:5,1')
+        ->name('pelatih.login');
     Route::get('register', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'showRegistrationForm'])->name('pelatih.register.form');
-    Route::post('register', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'register'])->name('pelatih.register');
+    Route::post('register', [App\Http\Controllers\Pelatih\Auth\PelatihAuthController::class, 'register'])
+        ->middleware('throttle:5,1')
+        ->name('pelatih.register');
 });
 
 // Protected pelatih routes
