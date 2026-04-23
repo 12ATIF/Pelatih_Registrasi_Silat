@@ -54,4 +54,9 @@ Route::prefix('pelatih')->middleware(['auth.pelatih', 'role:user'])->group(funct
     // Jadwal
     Route::get('jadwal', [App\Http\Controllers\Pelatih\JadwalPertandinganController::class, 'index'])->name('pelatih.jadwal.index');
     Route::get('jadwal/{id}', [App\Http\Controllers\Pelatih\JadwalPertandinganController::class, 'show'])->name('pelatih.jadwal.show');
+
+    // Profil
+    Route::get('profil', [App\Http\Controllers\Pelatih\ProfilController::class, 'index'])->name('pelatih.profil.index');
+    Route::put('profil', [App\Http\Controllers\Pelatih\ProfilController::class, 'update'])->name('pelatih.profil.update');
+    Route::put('profil/password', [App\Http\Controllers\Pelatih\ProfilController::class, 'updatePassword'])->name('pelatih.profil.update-password');
 });

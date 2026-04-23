@@ -68,7 +68,7 @@
             </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
-            <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-2"></i> Profil</a></li>
+            <li><a class="dropdown-item" href="{{ route('pelatih.profil.index') }}"><i class="fas fa-user-cog me-2"></i> Profil</a></li>
             <li>
                 <hr class="dropdown-divider">
             </li>
@@ -158,7 +158,7 @@
                 <div class="small text-muted text-truncate">{{ Auth::guard('pelatih')->user()->perguruan }}</div>
             </div>
         </div>
-        <a href="#" class="btn btn-outline-light btn-sm mt-2">
+        <a href="{{ route('pelatih.profil.index') }}" class="btn btn-outline-light btn-sm mt-2">
             <i class="fas fa-user-cog me-1"></i> Profil
         </a>
         <form method="POST" action="{{ route('pelatih.logout') }}" id="logout-form-offcanvas">
