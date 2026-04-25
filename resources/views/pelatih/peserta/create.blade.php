@@ -50,6 +50,7 @@
                     <label for="nik" class="form-label">Nomor NIK <span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('nik') is-invalid @enderror" id="nik"
                         name="nik" value="{{ old('nik') }}" maxlength="16" minlength="16"
+                        inputmode="numeric" pattern="[0-9]*" autocomplete="off"
                         placeholder="Masukkan 16 digit NIK" required>
                     @error('nik')
                     <div class="invalid-feedback">
@@ -87,24 +88,30 @@
                         {{ $message }}
                     </div>
                     @enderror
+                    <div id="usia_warning" class="alert alert-warning mt-2 py-2 small" style="display:none;">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        <span id="usia_warning_msg"></span>
+                    </div>
                 </div>
 
                 <div class="col-md-4">
                     <label for="berat_badan" class="form-label">Berat Badan (kg) <span
                             class="text-danger">*</span></label>
-                    <input type="number" step="0.1" class="form-control @error('berat_badan') is-invalid @enderror"
+                    <input type="number" step="0.1" min="20" max="300" inputmode="decimal"
+                        class="form-control @error('berat_badan') is-invalid @enderror"
                         id="berat_badan" name="berat_badan" value="{{ old('berat_badan') }}" required>
                     @error('berat_badan')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                     @enderror
+                    <small class="text-muted">Rentang: 20 - 300 kg</small>
                 </div>
 
                 <div class="col-md-4">
                     <label for="tinggi_badan" class="form-label">Tinggi Badan (cm) <span
                             class="text-danger">*</span></label>
-                    <input type="number" step="0.1"
+                    <input type="number" step="0.1" min="100" max="250" inputmode="decimal"
                         class="form-control @error('tinggi_badan') is-invalid @enderror" id="tinggi_badan"
                         name="tinggi_badan" value="{{ old('tinggi_badan') }}" required>
                     @error('tinggi_badan')
@@ -112,6 +119,7 @@
                         {{ $message }}
                     </div>
                     @enderror
+                    <small class="text-muted">Rentang: 100 - 250 cm</small>
                 </div>
             </div>
 
@@ -304,12 +312,13 @@
     </button>
     --}}
 
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between flex-wrap gap-2">
         <a href="{{ route('pelatih.peserta.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-1"></i> Kembali
         </a>
-        <button type="submit" class="btn btn-success">
-            <i class="fas fa-save me-1"></i> Simpan
+        <button type="submit" class="btn btn-success" id="btnSimpanPeserta">
+            <span class="btn-label"><i class="fas fa-save me-1"></i> Simpan</span>
+            <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...</span>
         </button>
     </div>
     </form>
@@ -410,10 +419,15 @@
             this.value = this.value.replace(/[^0-9]/g, '').substring(0, 16);
         });
 
-        // === Age Validation ===
+        // === Age Validation (inline, no alert) ===
         function validateAge() {
             const tanggalLahir = $('#tanggal_lahir').val();
             const kelompokUsiaId = $('#kelompok_usia_id').val();
+            const $warn = $('#usia_warning');
+            const $msg = $('#usia_warning_msg');
+
+            $warn.hide();
+            $('#tanggal_lahir').removeClass('is-invalid');
 
             if (tanggalLahir && kelompokUsiaId) {
                 const selectedOption = $(`#kelompok_usia_id option[value="${kelompokUsiaId}"]`);
@@ -421,21 +435,18 @@
                 const maxUsia = selectedOption.data('max');
                 const usiaName = selectedOption.text().split('(')[0].trim();
 
-                // Calculate age
                 const birthDate = new Date(tanggalLahir);
                 const today = new Date();
                 let age = today.getFullYear() - birthDate.getFullYear();
                 const monthDiff = today.getMonth() - birthDate.getMonth();
-
                 if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
                     age--;
                 }
 
-                // Check if age is within range
                 if (age < minUsia || age > maxUsia) {
-                    alert(
-                        `Usia peserta (${age} tahun) tidak sesuai dengan kelompok usia ${usiaName} (${minUsia}-${maxUsia} tahun)`
-                    );
+                    $msg.text(`Usia peserta (${age} tahun) tidak sesuai dengan kelompok usia ${usiaName} (${minUsia}-${maxUsia} tahun).`);
+                    $warn.show();
+                    $('#tanggal_lahir').addClass('is-invalid');
                     return false;
                 }
             }
@@ -515,6 +526,7 @@
         $('form').on('submit', function(e) {
             if (!validateAge()) {
                 e.preventDefault();
+                $('html, body').animate({ scrollTop: $('#usia_warning').offset().top - 100 }, 300);
                 return false;
             }
 
@@ -534,6 +546,12 @@
                     $(this).remove();
                 }
             });
+
+            // Loading state — prevent double submit
+            const $btn = $('#btnSimpanPeserta');
+            $btn.prop('disabled', true);
+            $btn.find('.btn-label').addClass('d-none');
+            $btn.find('.btn-loading').removeClass('d-none');
         });
 
         // Check on change

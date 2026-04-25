@@ -25,7 +25,8 @@
         }
         
         body {
-            height: 100vh;
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -34,6 +35,20 @@
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden; /* Prevent horizontal scroll on small screens due to large container */
         }
+
+        /* Password toggle */
+        .password-wrapper { position: relative; }
+        .password-wrapper .form-control { padding-right: 38px; }
+        .password-toggle {
+            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+            background: transparent; border: none; padding: 4px 8px;
+            color: #777; cursor: pointer; font-size: 0.9rem; line-height: 1;
+        }
+        .password-toggle:hover, .password-toggle:focus { color: var(--primary-orange); outline: none; }
+
+        /* Submit loading state */
+        .btn-silat:disabled, .btn-silat.is-loading { opacity: 0.75; cursor: not-allowed; transform: none !important; }
+        .btn-silat .spinner-border-sm { width: 0.95rem; height: 0.95rem; border-width: 0.15em; }
         
         .login-container {
             width: 100%;
@@ -332,8 +347,12 @@
             .login-side { padding: 40px 30px; } /* Adjusted padding */
         }
         
+        @media (max-width: 992px) {
+            body { align-items: flex-start; padding-top: 20px; padding-bottom: 20px; }
+        }
+
         @media (max-width: 576px) {
-            body { padding: 10px; }
+            body { padding: 10px; align-items: flex-start; }
             .login-container { border-radius: 16px; min-height: auto; }
             .graphic-side { padding: 20px 15px; min-height: 220px; } /* Further adjust padding */
             .brand-logo-icon { font-size: 1.5rem; }
@@ -408,25 +427,31 @@
                 </div>
             @endif
             
-            <form method="POST" action="{{ route('pelatih.login') }}" class="mt-2"> @csrf
-                
+            <form method="POST" action="{{ route('pelatih.login') }}" class="mt-2" id="loginForm"> @csrf
+
                 <div class="mb-3">
                     <label for="email" class="form-label">
                         <i class="fas fa-envelope"></i>Email Pelatih
                     </label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                           id="email" name="email" placeholder="nama@email.com" value="{{ old('email') }}" required autofocus>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                           id="email" name="email" placeholder="nama@email.com" value="{{ old('email') }}"
+                           inputmode="email" autocomplete="email" required autofocus>
                     @error('email')
                         <div class="invalid-feedback d-block"> {{ $message }}
                         </div>
                     @enderror
                 </div>
-                
+
                 <div class="mb-3"> <label for="password" class="form-label">
                         <i class="fas fa-lock"></i>Password
                     </label>
-                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                           id="password" name="password" placeholder="Password" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                               id="password" name="password" placeholder="Password" autocomplete="current-password" required>
+                        <button type="button" class="password-toggle" data-toggle-target="password" aria-label="Tampilkan password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                     @error('password')
                         <div class="invalid-feedback d-block"> {{ $message }}
                         </div>
@@ -443,7 +468,9 @@
                     {{-- <a href="#" class="forgot-password">Lupa Password?</a> --}}
                 </div>
                 
-                <button id="loginBtn" class="btn btn-silat w-100 py-2 mb-3" type="submit"> <i class="fas fa-sign-in-alt me-2"></i>LOGIN
+                <button class="btn btn-silat w-100 py-2 mb-3" type="submit" id="btnLogin">
+                    <span class="btn-label"><i class="fas fa-sign-in-alt me-2"></i>LOGIN</span>
+                    <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>MEMPROSES...</span>
                 </button>
 
                 <div class="text-center register-link mt-2"> <p class="mb-0" style="font-size: 0.9rem; color: #555;">Belum punya akun? 
@@ -504,6 +531,40 @@
             }, duration * 1000 + parseFloat(particle.style.animationDelay || "0s") * 1000);
         }
 
+        // === Password show/hide toggle ===
+        document.querySelectorAll('.password-toggle').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-toggle-target');
+                const input = document.getElementById(targetId);
+                const icon = this.querySelector('i');
+                if (!input) return;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                    this.setAttribute('aria-label', 'Sembunyikan password');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                    this.setAttribute('aria-label', 'Tampilkan password');
+                }
+            });
+        });
+
+        // === Submit loading state ===
+        const loginForm = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
+        if (loginForm && btnLogin) {
+            loginForm.addEventListener('submit', function() {
+                if (!loginForm.checkValidity()) return;
+                btnLogin.disabled = true;
+                btnLogin.classList.add('is-loading');
+                btnLogin.querySelector('.btn-label').classList.add('d-none');
+                btnLogin.querySelector('.btn-loading').classList.remove('d-none');
+            });
+        }
+
         // Auto-dismiss alerts
         const alerts = document.querySelectorAll('.alert-dismissible');
         alerts.forEach(function(alert) {
@@ -519,12 +580,6 @@
                     alert.style.display = 'none';
                 }
             }, 7000); // Dismiss after 7 seconds
-        });
-        // Prevent double submit
-        document.querySelector('form').addEventListener('submit', function() {
-            var btn = document.getElementById('loginBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>MEMPROSES...';
         });
     </script>
 </body>

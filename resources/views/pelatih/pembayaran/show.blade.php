@@ -233,10 +233,11 @@
 
                 {{-- Tombol Hitung Ulang --}}
                 @if($pembayaran->status != 'lunas')
-                <form action="{{ route('pelatih.pembayaran.recalculate', $pembayaran->id) }}" method="POST" class="mt-3">
+                <form action="{{ route('pelatih.pembayaran.recalculate', $pembayaran->id) }}" method="POST" class="mt-3 js-loading-form">
                     @csrf
-                    <button type="submit" class="btn btn-outline-secondary w-100 btn-sm">
-                        <i class="fas fa-sync me-1"></i> Hitung Ulang Tagihan
+                    <button type="submit" class="btn btn-outline-secondary w-100 btn-sm js-submit-btn">
+                        <span class="btn-label"><i class="fas fa-sync me-1"></i> Hitung Ulang Tagihan</span>
+                        <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Memproses...</span>
                     </button>
                 </form>
                 @endif
@@ -420,7 +421,8 @@
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-success px-4" id="btn_upload_bukti" disabled>
-                        <i class="fas fa-upload me-1"></i> Upload
+                        <span class="btn-label"><i class="fas fa-upload me-1"></i> Upload</span>
+                        <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Mengupload...</span>
                     </button>
                 </div>
             </form>
@@ -481,6 +483,19 @@ uploadArea.addEventListener('drop', e => {
     fileInput.files = e.dataTransfer.files;
     fileInput.dispatchEvent(new Event('change'));
 });
+
+// Loading state on upload submit — prevent double submit
+const uploadForm = fileInput.closest('form');
+if (uploadForm) {
+    uploadForm.addEventListener('submit', function() {
+        if (submitBtn.disabled) return;
+        submitBtn.disabled = true;
+        const lbl = submitBtn.querySelector('.btn-label');
+        const ldg = submitBtn.querySelector('.btn-loading');
+        if (lbl) lbl.classList.add('d-none');
+        if (ldg) ldg.classList.remove('d-none');
+    });
+}
 
 // Copy norek
 function copyNorek() {

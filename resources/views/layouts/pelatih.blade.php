@@ -18,6 +18,7 @@
         /* === Layout Utama: Sidebar tetap, konten scroll sendiri === */
         html, body {
             height: 100vh;
+            height: 100dvh; /* Use dynamic viewport height to avoid mobile address bar overlap */
             margin: 0;
             overflow: hidden; /* Mencegah seluruh halaman scroll */
         }
@@ -123,6 +124,7 @@
             .app-wrapper {
                 flex-direction: column;
                 height: 100vh; /* Tetap 100vh agar app-wrapper tidak melebihi viewport */
+                height: 100dvh; /* Dynamic viewport height for mobile */
             }
             .content {
                 height: 100%; /* Biarkan child yang memenuhi ruang */
@@ -321,6 +323,20 @@
         setTimeout(function() {
             $('.alert-dismissible').alert('close');
         }, 5000);
+
+        // === Generic loading state for forms with .js-loading-form ===
+        // Add class "js-loading-form" to <form> and "js-submit-btn" to its submit button.
+        // Submit button needs <span class="btn-label"> and <span class="btn-loading d-none"> children.
+        $(document).on('submit', 'form.js-loading-form', function() {
+            const $form = $(this);
+            const $btn = $form.find('.js-submit-btn').first();
+            if (!$btn.length || $btn.prop('disabled')) return;
+            // Skip if HTML5 validation fails
+            if (this.checkValidity && !this.checkValidity()) return;
+            $btn.prop('disabled', true);
+            $btn.find('.btn-label').addClass('d-none');
+            $btn.find('.btn-loading').removeClass('d-none');
+        });
     </script>
     
     @stack('scripts')

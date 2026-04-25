@@ -116,7 +116,7 @@
                 <h5 class="modal-title" id="uploadDokumenModalLabel">Upload Dokumen</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
            </div>
-           <form action="{{ route('pelatih.dokumen.store', $peserta->id) }}" method="POST" enctype="multipart/form-data">
+           <form action="{{ route('pelatih.dokumen.store', $peserta->id) }}" method="POST" enctype="multipart/form-data" class="js-loading-form">
                @csrf
                <div class="modal-body">
                    <div class="mb-3">
@@ -143,7 +143,10 @@
                </div>
                <div class="modal-footer">
                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                   <button type="submit" class="btn btn-success" id="btn_upload_dokumen">Upload</button>
+                   <button type="submit" class="btn btn-success js-submit-btn" id="btn_upload_dokumen">
+                       <span class="btn-label"><i class="fas fa-upload me-1"></i> Upload</span>
+                       <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Mengupload...</span>
+                   </button>
                </div>
            </form>
        </div>

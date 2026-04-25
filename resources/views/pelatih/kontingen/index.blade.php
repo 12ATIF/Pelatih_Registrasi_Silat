@@ -91,7 +91,7 @@
                 <h5 class="modal-title" id="tambahKontingenModalLabel">Tambah Kontingen</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('pelatih.kontingen.store') }}" method="POST">
+            <form action="{{ route('pelatih.kontingen.store') }}" method="POST" class="js-loading-form">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -104,13 +104,16 @@
                     </div>
                     <div class="mb-3">
                         <label for="kontak_pendamping" class="form-label">Kontak Pendamping</label>
-                        <input type="text" class="form-control" id="kontak_pendamping" name="kontak_pendamping">
+                        <input type="tel" class="form-control" id="kontak_pendamping" name="kontak_pendamping" inputmode="tel" pattern="[0-9+\-\s]*" autocomplete="tel">
                         <div class="form-text">Nomor telepon pendamping kontingen (opsional).</div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="submit" class="btn btn-success js-submit-btn">
+                        <span class="btn-label">Simpan</span>
+                        <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Menyimpan...</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -125,7 +128,7 @@
                 <h5 class="modal-title" id="editKontingenModalLabel">Edit Kontingen</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editKontingenForm" method="POST">
+            <form id="editKontingenForm" method="POST" class="js-loading-form">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -139,13 +142,16 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit_kontak_pendamping" class="form-label">Kontak Pendamping</label>
-                        <input type="text" class="form-control" id="edit_kontak_pendamping" name="kontak_pendamping">
+                        <input type="tel" class="form-control" id="edit_kontak_pendamping" name="kontak_pendamping" inputmode="tel" pattern="[0-9+\-\s]*" autocomplete="tel">
                         <div class="form-text">Nomor telepon pendamping kontingen (opsional).</div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-success js-submit-btn">
+                        <span class="btn-label">Simpan Perubahan</span>
+                        <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Menyimpan...</span>
+                    </button>
                 </div>
             </form>
         </div>

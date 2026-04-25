@@ -230,6 +230,33 @@
         .form-content-side .row .col-md-6:first-child { padding-right: 0.75rem; }
         .form-content-side .row .col-md-6:last-child { padding-left: 0.75rem; }
 
+        /* Password toggle */
+        .password-wrapper { position: relative; }
+        .password-wrapper .form-control { padding-right: 36px; }
+        .password-toggle {
+            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+            background: transparent; border: none; padding: 4px 8px;
+            color: var(--medium-gray-text); cursor: pointer; font-size: 0.85rem;
+            line-height: 1;
+        }
+        .password-toggle:hover { color: var(--primary-orange); }
+        .password-toggle:focus { outline: none; color: var(--primary-orange); }
+
+        /* Password strength meter */
+        .pw-strength { margin-top: 6px; }
+        .pw-strength-bar { height: 4px; border-radius: 2px; background: #e5e5e5; overflow: hidden; }
+        .pw-strength-bar-fill { height: 100%; width: 0%; transition: width 0.3s ease, background-color 0.3s ease; background: #dc3545; }
+        .pw-strength-label { font-size: 0.7rem; margin-top: 3px; color: var(--medium-gray-text); font-weight: 600; }
+
+        /* Submit loading state */
+        .btn-silat-submit:disabled,
+        .btn-silat-submit.is-loading {
+            opacity: 0.75; cursor: not-allowed; transform: none !important;
+        }
+        .btn-silat-submit .spinner-border-sm {
+            width: 0.9rem; height: 0.9rem; border-width: 0.15em;
+        }
+
 
         /* Responsive Design */
         @media (max-width: 992px) {
@@ -253,8 +280,18 @@
             .page-title-section p { font-size: 0.9rem; }
         }
         
+        @media (max-width: 992px) {
+            body {
+                align-items: flex-start;
+                min-height: 100vh;
+                min-height: 100dvh;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+        }
+
         @media (max-width: 576px) {
-            body { padding: 15px; }
+            body { padding: 15px; align-items: flex-start; }
             .form-page-container { border-radius: 20px; max-width: 100%;}
             .graphic-side { padding: 25px 20px; min-height: 280px; }
             .brand-logo-icon { font-size: 1.8rem; }
@@ -339,7 +376,7 @@
                 </div>
             @endif
             
-            <form method="POST" action="{{ route('pelatih.register') }}" class="mt-1">
+            <form method="POST" action="{{ route('pelatih.register') }}" class="mt-1" id="registerForm" novalidate>
                 @csrf
                 
                 <div class="mb-3">
@@ -360,14 +397,14 @@
                 
                 <div class="row mb-2"> <div class="col-md-6 mb-3 mb-md-0">
                         <label for="email" class="form-label"><i class="fas fa-envelope"></i>Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="cth: email@anda.com" value="{{ old('email') }}" required>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="cth: email@anda.com" value="{{ old('email') }}" inputmode="email" autocomplete="email" required>
                         @error('email')
                             <div class="invalid-feedback d-block mt-1" style="font-size: 0.8rem;">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="no_hp" class="form-label"><i class="fas fa-phone"></i>Nomor HP <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('no_hp') is-invalid @enderror" id="no_hp" name="no_hp" placeholder="cth: 08123456789" value="{{ old('no_hp') }}" required>
+                        <input type="tel" class="form-control @error('no_hp') is-invalid @enderror" id="no_hp" name="no_hp" placeholder="cth: 08123456789" value="{{ old('no_hp') }}" inputmode="tel" pattern="[0-9+\-\s]*" autocomplete="tel" required>
                         @error('no_hp')
                             <div class="invalid-feedback d-block mt-1" style="font-size: 0.8rem;">{{ $message }}</div>
                         @enderror
@@ -377,18 +414,36 @@
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="password" class="form-label"><i class="fas fa-lock"></i>Password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Minimal 8 karakter" required>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Minimal 8 karakter" autocomplete="new-password" minlength="8" required>
+                            <button type="button" class="password-toggle" data-toggle-target="password" aria-label="Tampilkan password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="pw-strength" id="pw-strength" style="display:none;">
+                            <div class="pw-strength-bar"><div class="pw-strength-bar-fill" id="pw-strength-fill"></div></div>
+                            <div class="pw-strength-label" id="pw-strength-label">&nbsp;</div>
+                        </div>
                         @error('password')
                             <div class="invalid-feedback d-block mt-1" style="font-size: 0.8rem;">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="password_confirmation" class="form-label"><i class="fas fa-redo-alt"></i>Konfirmasi Password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Ulangi password" required>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Ulangi password" autocomplete="new-password" minlength="8" required>
+                            <button type="button" class="password-toggle" data-toggle-target="password_confirmation" aria-label="Tampilkan password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback d-block mt-1" id="pw-match-error" style="font-size: 0.8rem; display:none;">Konfirmasi password tidak cocok.</div>
                     </div>
                 </div>
                 
-                <div class="d-grid gap-2 mt-4"> <button class="btn btn-silat-submit py-2" type="submit"> <i class="fas fa-user-plus me-2"></i>DAFTAR AKUN
+                <div class="d-grid gap-2 mt-4">
+                    <button class="btn btn-silat-submit py-2" type="submit" id="btnRegister">
+                        <span class="btn-label"><i class="fas fa-user-plus me-2"></i>DAFTAR AKUN</span>
+                        <span class="btn-loading d-none"><span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>MENDAFTARKAN...</span>
                     </button>
                 </div>
                 
@@ -447,11 +502,99 @@
                 const alertInstance = bootstrap.Alert.getInstance(alert);
                 if (alertInstance) {
                     alertInstance.close();
-                } else if (alert.offsetParent !== null) { 
+                } else if (alert.offsetParent !== null) {
                      new bootstrap.Alert(alert).close();
                 }
-            }, 7000); 
+            }, 7000);
         });
+
+        // === Password show/hide toggle ===
+        document.querySelectorAll('.password-toggle').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-toggle-target');
+                const input = document.getElementById(targetId);
+                const icon = this.querySelector('i');
+                if (!input) return;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                    this.setAttribute('aria-label', 'Sembunyikan password');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                    this.setAttribute('aria-label', 'Tampilkan password');
+                }
+            });
+        });
+
+        // === Password strength meter ===
+        const pwInput = document.getElementById('password');
+        const pwStrengthEl = document.getElementById('pw-strength');
+        const pwFill = document.getElementById('pw-strength-fill');
+        const pwLabel = document.getElementById('pw-strength-label');
+        function evaluateStrength(pw) {
+            let score = 0;
+            if (pw.length >= 8) score++;
+            if (pw.length >= 12) score++;
+            if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
+            if (/[0-9]/.test(pw)) score++;
+            if (/[^A-Za-z0-9]/.test(pw)) score++;
+            return score;
+        }
+        if (pwInput) {
+            pwInput.addEventListener('input', function() {
+                const pw = this.value;
+                if (!pw) { pwStrengthEl.style.display = 'none'; return; }
+                pwStrengthEl.style.display = 'block';
+                const score = evaluateStrength(pw);
+                const levels = [
+                    { width: '20%', color: '#dc3545', text: 'Sangat Lemah' },
+                    { width: '40%', color: '#fd7e14', text: 'Lemah' },
+                    { width: '60%', color: '#ffc107', text: 'Sedang' },
+                    { width: '80%', color: '#0dcaf0', text: 'Kuat' },
+                    { width: '100%', color: '#198754', text: 'Sangat Kuat' },
+                ];
+                const idx = Math.min(score, levels.length) - 1;
+                const level = levels[Math.max(idx, 0)];
+                pwFill.style.width = level.width;
+                pwFill.style.backgroundColor = level.color;
+                pwLabel.textContent = level.text;
+                pwLabel.style.color = level.color;
+            });
+        }
+
+        // === Confirm password match check ===
+        const pwConfirm = document.getElementById('password_confirmation');
+        const pwMatchErr = document.getElementById('pw-match-error');
+        function checkMatch() {
+            if (!pwInput || !pwConfirm) return true;
+            if (!pwConfirm.value) { pwMatchErr.style.display = 'none'; return true; }
+            const ok = pwInput.value === pwConfirm.value;
+            pwMatchErr.style.display = ok ? 'none' : 'block';
+            return ok;
+        }
+        if (pwConfirm) pwConfirm.addEventListener('input', checkMatch);
+        if (pwInput) pwInput.addEventListener('input', checkMatch);
+
+        // === Submit loading state + double-submit prevention ===
+        const regForm = document.getElementById('registerForm');
+        const btnReg = document.getElementById('btnRegister');
+        if (regForm && btnReg) {
+            regForm.addEventListener('submit', function(e) {
+                if (!regForm.checkValidity() || !checkMatch()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    regForm.classList.add('was-validated');
+                    return;
+                }
+                btnReg.disabled = true;
+                btnReg.classList.add('is-loading');
+                btnReg.querySelector('.btn-label').classList.add('d-none');
+                btnReg.querySelector('.btn-loading').classList.remove('d-none');
+            });
+        }
     </script>
 </body>
 </html>
