@@ -443,7 +443,7 @@
                     {{-- <a href="#" class="forgot-password">Lupa Password?</a> --}}
                 </div>
                 
-                <button class="btn btn-silat w-100 py-2 mb-3" type="submit"> <i class="fas fa-sign-in-alt me-2"></i>LOGIN
+                <button id="loginBtn" class="btn btn-silat w-100 py-2 mb-3" type="submit"> <i class="fas fa-sign-in-alt me-2"></i>LOGIN
                 </button>
 
                 <div class="text-center register-link mt-2"> <p class="mb-0" style="font-size: 0.9rem; color: #555;">Belum punya akun? 
@@ -519,6 +519,12 @@
                     alert.style.display = 'none';
                 }
             }, 7000); // Dismiss after 7 seconds
+        });
+        // Prevent double submit
+        document.querySelector('form').addEventListener('submit', function() {
+            var btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>MEMPROSES...';
         });
     </script>
 </body>
